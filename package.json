@@ -1,0 +1,39 @@
+{
+  "name": "vies-vat-validator-mcp",
+  "version": "1.0.0",
+  "description": "MCP server for EU VIES VAT validation via the free VIES API, with local format pre-validation and a free TTL cache. Bilingual (中/EN) error codes. 欧盟 VIES 免费接口校验 VAT 税号，含本地格式缓存与中英双语错误码。",
+  "type": "module",
+  "main": "dist/index.js",
+  "bin": {
+    "vies-vat-validator-mcp": "dist/index.js"
+  },
+  "files": [
+    "dist",
+    "SPEC.md",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/index.js",
+    "dev": "tsx src/index.ts",
+    "test": "vitest run",
+    "verify": "tsx scripts/verify.ts",
+    "apify:login": "apify login",
+    "apify:validate": "apify actor:validate",
+    "apify:push": "apify push"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.0",
+    "tsx": "^4.16.2",
+    "typescript": "^5.5.4",
+    "vitest": "^2.0.5"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "license": "MIT"
+}

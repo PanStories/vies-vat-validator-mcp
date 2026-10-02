@@ -1,0 +1,147 @@
+// Verification showcase generator (Phase 4.5).
+// Produces a self-contained HTML report from REAL function outputs — not
+// hand-written summaries. Demonstrates what an agent actually receives.
+import { writeFileSync } from "node:fs";
+import { fileURLToPath } from "node:url";
+import { dirname, join } from "node:path";
+import { validateFormat, parseVat } from "../src/vat/format.js";
+import { checkVatLive } from "../src/vies/client.js";
+import { ERROR_CODES, getErrorCode } from "../src/errors/codes.js";
+import { COUNTRIES } from "../src/data/countries.js";
+import { viesCache } from "../src/vat/cache.js";
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const OUT = join(__dirname, "..", "verify-report.html");
+
+interface Sample {
+  title: string;
+  description: string;
+  payload: unknown;
+}
+
+const samples: Sample[] = [];
+
+// 1) Format-only checks (real, free, no network)
+samples.push({
+  title: "Format check — well-formed FR",
+  description: "validateFormat('FR','123456789') — should be valid.",
+  payload: validateFormat("FR", "123456789"),
+});
+samples.push({
+  title: "Format check — malformed FR",
+  description: "validateFormat('FR','12') — too short, should be invalid.",
+  payload: validateFormat("FR", "12"),
+});
+samples.push({
+  title: "Format check — unsupported country",
+  description: "validateFormat('US','123') — US not in VIES scope.",
+  payload: validateFormat("US", "123"),
+});
+samples.push({
+  title: "Parse + format — prefixed input",
+  description: "parseVat('DE 123456789') then validateFormat.",
+  payload: (() => {
+    const p = parseVat("DE 123456789");
+    return { parsed: p, format: validateFormat(p.countryCode, p.vatNumber) };
+  })(),
+});
+
+// 2) Live VIES attempt (test service) — graceful regardless of network
+let liveNote = "Attempted live call to VIES test service.";
+const live = await checkVatLive("AT", "U12345678", { test: true, timeoutMs: 8000 });
+samples.push({
+  title: "Live VIES (test service) — AT U12345678",
+  description: liveNote,
+  payload: live,
+});
+
+// 3) Cache behavior
+viesCache.set("FR:123456789", { valid: true, source: "vies" } as unknown as Record<string, unknown>);
+samples.push({
+  title: "Free cache — set + get",
+  description: "Demonstrates the free TTL cache layer used to avoid VIES rate limits.",
+  payload: {
+    setKey: "FR:123456789",
+    got: viesCache.get("FR:123456789"),
+    size: viesCache.size,
+  },
+});
+
+// 4) Bilingual error table (excerpt)
+samples.push({
+  title: "Bilingual error table (full)",
+  description: `All ${ERROR_CODES.length} error codes with 中/EN messages + remediation.`,
+  payload: ERROR_CODES,
+});
+
+// 5) Supported countries summary
+samples.push({
+  title: "Supported countries",
+  description: `VIES-supported countries: ${COUNTRIES.length} (EU 27 + GB + XI).`,
+  payload: { count: COUNTRIES.length, countries: COUNTRIES },
+});
+
+// 6) Error lookup example
+samples.push({
+  title: "Error lookup — VIES_MS_UNAVAILABLE",
+  description: "getErrorCode('VIES_MS_UNAVAILABLE') as an agent would render it.",
+  payload: getErrorCode("VIES_MS_UNAVAILABLE"),
+});
+
+function esc(s: string): string {
+  return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+
+const cards = samples
+  .map(
+    (s, i) => `
+  <section class="card">
+    <h2>${i + 1}. ${esc(s.title)}</h2>
+    <p class="desc">${esc(s.description)}</p>
+    <details>
+      <summary>Raw JSON（真实字节 / real payload）</summary>
+      <pre>${esc(JSON.stringify(s.payload, null, 2))}</pre>
+    </details>
+  </section>`,
+  )
+  .join("\n");
+
+const html = `<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>VIES VAT Validator MCP — Verification Showcase</title>
+<style>
+  :root { --bg:#f7f8fa; --card:#ffffff; --ink:#1f2933; --muted:#66727f; --line:#e3e8ef; --accent:#2563eb; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font:15px/1.6 -apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif; }
+  header { padding:28px 24px; background:var(--card); border-bottom:1px solid var(--line); }
+  h1 { margin:0 0 6px; font-size:22px; }
+  .sub { color:var(--muted); }
+  main { max-width:920px; margin:0 auto; padding:24px; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:18px 20px; margin-bottom:16px; }
+  h2 { font-size:16px; margin:0 0 4px; }
+  .desc { color:var(--muted); margin:0 0 10px; }
+  details { border-top:1px dashed var(--line); padding-top:10px; }
+  summary { cursor:pointer; color:var(--accent); font-weight:600; }
+  pre { background:#0f172a; color:#e2e8f0; padding:14px; border-radius:8px; overflow:auto; font-size:12.5px; }
+  footer { text-align:center; color:var(--muted); padding:20px; font-size:13px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>VIES VAT Validator MCP — 验证展示</h1>
+  <div class="sub">真实函数输出（非摘要）· Real function outputs · 数据源：欧盟 VIES 免费接口 + 本地格式缓存</div>
+</header>
+<main>
+  ${cards}
+</main>
+<footer>Generated by scripts/verify.ts · vies-vat-validator-mcp v1.0.0</footer>
+</body>
+</html>`;
+
+writeFileSync(OUT, html, "utf8");
+console.log(`Verification report written to: ${OUT}`);
+console.log(`Samples: ${samples.length} | Countries: ${COUNTRIES.length} | Error codes: ${ERROR_CODES.length}`);
+console.log(`Live VIES attempt outcome: ${live.ok ? "ok" : "error=" + live.error}`);

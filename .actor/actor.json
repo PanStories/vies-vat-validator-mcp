@@ -1,0 +1,51 @@
+{
+  "actorSpecification": 1,
+  "name": "vies-vat-validator-mcp",
+  "title": "VIES VAT Validator MCP",
+  "description": "Validate EU VAT numbers via the official free VIES SOAP API, with a free local format-precheck cache and bilingual (中/EN) error codes. Built for cross-border e-commerce and trade compliance. 用欧盟官方免费 VIES 接口校验 VAT 税号，含本地格式缓存与中英双语错误码，面向跨境电商/外贸合规。",
+  "version": "1.0.0",
+  "buildTag": "latest",
+  "usesStandbyMode": true,
+  "webServerMcpPath": "/mcp",
+  "webServer": {
+    "requestHandler": "src/handler.ts",
+    "type": "nodejs"
+  },
+  "environmentVariables": {
+    "VIES_TIMEOUT_MS": {
+      "description": "VIES request timeout in ms (default 10000).",
+      "default": "10000",
+      "required": false
+    }
+  },
+  "pricingModel": "PAY_PER_EVENT",
+  "pricingEvents": {
+    "mcp-check-format": {
+      "eventTitle": "VAT format pre-check (free)",
+      "eventPriceUsd": 0
+    },
+    "mcp-get-error-codes": {
+      "eventTitle": "Get bilingual error-code table (free)",
+      "eventPriceUsd": 0
+    },
+    "mcp-list-countries": {
+      "eventTitle": "List supported countries (free)",
+      "eventPriceUsd": 0
+    },
+    "mcp-validate-vat": {
+      "eventTitle": "Live VIES VAT validation",
+      "eventPriceUsd": 0.0005
+    }
+  },
+  "dockerfile": ".actor/Dockerfile",
+  "inputSchema": {
+    "title": "VIES VAT Validator MCP",
+    "description": "This Actor is a remote MCP server. Connect an MCP client to the standby /mcp endpoint and call the tools. No manual input is required.",
+    "type": "object",
+    "schemaVersion": 1,
+    "properties": {},
+    "required": []
+  },
+  "output": "./output_schema.json",
+  "categories": ["DEVELOPER_TOOLS"]
+}

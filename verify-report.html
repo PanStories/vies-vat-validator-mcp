@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html data-page-node-id="crmZI4uXTDXVNJermD2jUr" lang="zh">
+<head data-page-node-id="Mop4V9TwjWw6j3kW4KxF0z">
+<script data-page-node-id="9Y6chycGOcWBcmIJhGadBt" src="/page/page_comm/inject.js"></script>
+<meta data-page-node-id="KB6zK86j956AJ1UWrp1VQI" charset="utf-8">
+<meta data-page-node-id="TTLbMSmtbruSnx9mPg5kuw" content="width=device-width, initial-scale=1" name="viewport">
+<title data-page-node-id="RvluwEPFgavNrzlVxoeaTx" data-pnid-children="vDCHCGKj5JoFmT9glMwf5B">VIES VAT Validator MCP — Verification Showcase</title>
+<style data-page-node-id="6uMEjzsDyMsXpdOhMiSiOE" data-pnid-children="KWI6xfhI51SRJiU4fYLxEm">
+  :root { --bg:#f7f8fa; --card:#ffffff; --ink:#1f2933; --muted:#66727f; --line:#e3e8ef; --accent:#2563eb; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font:15px/1.6 -apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif; }
+  header { padding:28px 24px; background:var(--card); border-bottom:1px solid var(--line); }
+  h1 { margin:0 0 6px; font-size:22px; }
+  .sub { color:var(--muted); }
+  main { max-width:920px; margin:0 auto; padding:24px; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:18px 20px; margin-bottom:16px; }
+  h2 { font-size:16px; margin:0 0 4px; }
+  .desc { color:var(--muted); margin:0 0 10px; }
+  details { border-top:1px dashed var(--line); padding-top:10px; }
+  summary { cursor:pointer; color:var(--accent); font-weight:600; }
+  pre { background:#0f172a; color:#e2e8f0; padding:14px; border-radius:8px; overflow:auto; font-size:12.5px; }
+  footer { text-align:center; color:var(--muted); padding:20px; font-size:13px; }
+</style>
+</head>
+<body data-page-node-id="ne2oAC60Ln1PKLH4XoeCKU">
+<header data-page-node-id="D8U5G1UjyYKm0bCu9J5aTi">
+  <h1 data-page-node-id="wLJssphWRMYXwG2bMSu0nx"><!--pnid:Vknak5VnB4nUjcamQXpACc-->VIES VAT Validator MCP — 验证展示</h1>
+  <div data-page-node-id="lb7v95GNAozViWx1kXRgR3" class="sub"><!--pnid:ffpThXtZOya1zJDd2M98dE-->真实函数输出（非摘要）· Real function outputs · 数据源：欧盟 VIES 免费接口 + 本地格式缓存</div>
+</header>
+<main data-page-node-id="WCFWObx9w5IOVeYiKrKp1z">
+  
+  <section data-page-node-id="dIbdYacoExywbS0CIyEZDZ" class="card">
+    <h2 data-page-node-id="7cgMFLEbPDrdpn8rM7ntOl"><!--pnid:78AbcRnHhrCm2uXvKt4yF1-->1. Format check — well-formed FR</h2>
+    <p data-page-node-id="qQs9OsxJBUHnf6JxdEnL4J" class="desc"><!--pnid:Evp3kRuw6NdQFMHgtHst89-->validateFormat('FR','123456789') — should be valid.</p>
+    <details data-page-node-id="QU4JI6at8ulWi5vMzxstyM">
+      <summary data-page-node-id="sRtLzmS5dg2evpZsozJD24"><!--pnid:edrFCFqb2lm3jP01KkLlFU-->Raw JSON（真实字节 / real payload）</summary>
+      <pre data-page-node-id="rzoBg3N8AKr3GZAo2EwG63" data-pnid-children="06hK6wrdAp2lNdq2vrNTyY">{
+  "formatValid": true,
+  "countryCode": "FR",
+  "vatNumber": "123456789",
+  "normalized": "FR123456789",
+  "pattern": "^([A-Z]{2})?\\d{9}$",
+  "errorCode": null
+}</pre>
+    </details>
+  </section>
+
+  <section data-page-node-id="oTT6hRcltAgof2WcK6VUXG" class="card">
+    <h2 data-page-node-id="TZaDoj219hUHzA5jdxtoMo"><!--pnid:DCe507csqYfZ0B5n30YqFx-->2. Format check — malformed FR</h2>
+    <p data-page-node-id="RuiBxcGXkhMdM93NrnGx8g" class="desc"><!--pnid:rqVJZJn7esdqbloF4fSl0b-->validateFormat('FR','12') — too short, should be invalid.</p>
+    <details data-page-node-id="uMjqGLUJldeqPDixv2bUpl">
+      <summary data-page-node-id="JwHyLdGZO4VHdX681cSLcA"><!--pnid:ssBipmBoEApDuIfwlHXujy-->Raw JSON（真实字节 / real payload）</summary>
+      <pre data-page-node-id="MaN4iQJ8eXB9OpALBKWdT9" data-pnid-children="9EzCOAiTTQFQaRMA0ovANk">{
+  "formatValid": false,
+  "countryCode": "FR",
+  "vatNumber": "12",
+  "normalized": "FR12",
+  "pattern": "^([A-Z]{2})?\\d{9}$",
+  "errorCode": "VAT_FORMAT_INVALID"
+}</pre>
+    </details>
+  </section>
+
+  <section data-page-node-id="f4DiOPiroDAiMmoNlL7YPh" class="card">
+    <h2 data-page-node-id="fEwMXumGWXAsgX5MGjjjxI"><!--pnid:M35R2ad31FA06HcuvOdrZp-->3. Format check — unsupported country</h2>
+    <p data-page-node-id="r2NnpDyUNtFJyahP1A9ol8" class="desc"><!--pnid:behCgChMePMgWOFYSIqhEe-->validateFormat('US','123') — US not in VIES scope.</p>
+    <details data-page-node-id="Ftfv2zAUVRJkL3XRiKtQjL">
+      <summary data-page-node-id="bZ5GciYAXDomNM2iFeTg8O"><!--pnid:qSeSEXxtIzfnfV8Uc7bYI3-->Raw JSON（真实字节 / real payload）</summary>
+      <pre data-page-node-id="otIpqaDyH0TOhrYDmjodcI" data-pnid-children="CsZzxG3IsVNDtk7SkxzW7q">{
+  "formatValid": false,
+  "countryCode": "US",
+  "vatNumber": "123",
+  "normalized": "US123",
+  "pattern": null,
+  "errorCode": "COUNTRY_UNSUPPORTED"
+}</pre>
+    </details>
+  </section>
+
+  <section data-page-node-id="cjJxSUOYs6n4MTXDivyfjS" class="card">
+    <h2 data-page-node-id="e4FR13qio7QGgmVCp8T8Jr"><!--pnid:uZy0JYpLiZBdpHFjgAeebJ-->4. Parse + format — prefixed input</h2>
+    <p data-page-node-id="lRuDT7tgqN9fyEJE3f7grx" class="desc"><!--pnid:N8pq7nMoxqlx5ZdclVCK3a-->parseVat('DE 123456789') then validateFormat.</p>
+    <details data-page-node-id="hPtPUELZmKa9Rg2IxkSnuw">
+      <summary data-page-node-id="E8iAmWN6mbHsCbFOWAiUaC"><!--pnid:gvMhefTsAJ4ldTi2wVEq88-->Raw JSON（真实字节 / real payload）</summary>
+      <pre data-page-node-id="gAJpaXBAfub4ECbDDRoTpQ" data-pnid-children="gyc3G3cHDjyi8lBlys7CzB">{
+  "parsed": {
+    "countryCode": "DE",
+    "vatNumber": "123456789"
+  },
+  "format": {
+    "formatValid": true,
+    "countryCode": "DE",
+    "vatNumber": "123456789",
+    "normalized": "DE123456789",
+    "pattern": "^\\d{9}$",
+    "errorCode": null
+  }
+}</pre>
+    </details>
+  </section>
+
+  <section data-page-node-id="9eGTH151y3JMA9wVsLzu2g" class="card">
+    <h2 data-page-node-id="MUBzuCBbgR5g6CpiBfYJ5N"><!--pnid:4HjMEHKq0IBRb7hzwgMXpq-->5. Live VIES (test service) — AT U12345678</h2>
+    <p data-page-node-id="LiKiiSt1Fuxi8eHaxtJsWZ" class="desc"><!--pnid:V405eZEaBWk1kqulRtombb-->Attempted live call to VIES test service.</p>
+    <details data-page-node-id="Zd9FdQ1NjUxtHpWttXTDCs">
+      <summary data-page-node-id="ieOzxLXhY4etfvOvunXORC"><!--pnid:PVuTUJm4t9i58yYFP0Y2KH-->Raw JSON（真实字节 / real payload）</summary>
+      <pre data-page-node-id="5L49kpcjxQnZnwBX3wq9A2" data-pnid-children="GYlP4nQp4fx5uqsMZ5pZZn">{
+  "ok": false,
+  "error": "VIES_SERVICE_UNAVAILABLE",
+  "faultString": "SERVICE_UNAVAILABLE"
+}</pre>
+    </details>
+  </section>
+
+  <section data-page-node-id="eVaQDLZUulmK4qCC0suSeo" class="card">
+    <h2 data-page-node-id="oJO4QHj9HvdLRTywvGuv5Y"><!--pnid:HVh9RVRe3Yq3Qo3OsTeiQS-->6. Free cache — set + get</h2>
+    <p data-page-node-id="nyghQ3wjdjIFScAoaPZZEi" class="desc"><!--pnid:HblZmDZqz84sKvmUc0d37j-->Demonstrates the free TTL cache layer used to avoid VIES rate limits.</p>
+    <details data-page-node-id="IYKgwkvExJwaohPCDxhPKR">
+      <summary data-page-node-id="CTsiLIzEcJ2MO45Ae0xP2t"><!--pnid:OFyIA85GanD5wmOuLBkxBM-->Raw JSON（真实字节 / real payload）</summary>
+      <pre data-page-node-id="hwkH6ZwKEuWLrQs3gkDfEJ" data-pnid-children="PRV7TJ9cUiujlvpQegbidT">{
+  "setKey": "FR:123456789",
+  "got": {
+    "valid": true,
+    "source": "vies"
+  },
+  "size": 1
+}</pre>
+    </details>
+  </section>
+
+  <section data-page-node-id="QbZufgFFxfmadlS99vbVRN" class="card">
+    <h2 data-page-node-id="ZgrlQlK7Nryn6aezGPUr4I"><!--pnid:2ckAKoy4kzrfu4dNCqNXCn-->7. Bilingual error table (full)</h2>
+    <p data-page-node-id="rl6QeQ61mmAjidVZQJ660C" class="desc"><!--pnid:AQ7kd8E3LdSqV34tHFhA8T-->All 13 error codes with 中/EN messages + remediation.</p>
+    <details data-page-node-id="m8QrzG8gj4doRa4Q8Vo4th">
+      <summary data-page-node-id="SJeqOc4jkISeygzpkEsjlU"><!--pnid:akBo4hAFH5hJOg4vRiTz5x-->Raw JSON（真实字节 / real payload）</summary>
+      <pre data-page-node-id="iPGYkqf2tU9LQmeu7NdJsd" data-pnid-children="f6Lavn2b83jfeuowkDTyg7">[
+  {
+    "code": "VAT_OK",
+    "severity": "info",
+    "messageZh": "校验通过",
+    "messageEn": "Validation passed",
+    "actionZh": "无需处理。",
+    "actionEn": "No action required."
+  },
+  {
+    "code": "VAT_FORMAT_INVALID",
+    "severity": "warning",
+    "messageZh": "VAT 号格式不符合该国规则",
+    "messageEn": "VAT number format does not match the country pattern",
+    "actionZh": "检查国家代码与号码位数/字符，去除空格后重试。",
+    "actionEn": "Check the country code and digit/character pattern; strip spaces and retry."
+  },
+  {
+    "code": "VAT_VIES_INVALID",
+    "severity": "warning",
+    "messageZh": "VIES 返回该 VAT 号无效",
+    "messageEn": "VIES reports this VAT number as invalid",
+    "actionZh": "向交易对方核实 VAT 号；可能已注销或录入错误。",
+    "actionEn": "Verify the VAT number with the counterparty; it may be deregistered or mistyped."
+  },
+  {
+    "code": "VIES_MS_UNAVAILABLE",
+    "severity": "error",
+    "messageZh": "成员国税务系统暂不可用",
+    "messageEn": "Member State service unavailable",
+    "actionZh": "该国税务接口临时不可用，稍后重试（建议开启缓存）。",
+    "actionEn": "The member state's tax interface is temporarily down; retry later (caching recommended)."
+  },
+  {
+    "code": "VIES_SERVICE_UNAVAILABLE",
+    "severity": "error",
+    "messageZh": "VIES 服务暂不可用",
+    "messageEn": "VIES service unavailable",
+    "actionZh": "欧盟 VIES 整体不可用，稍后重试。",
+    "actionEn": "The EU VIES service is unavailable; retry later."
+  },
+  {
+    "code": "VIES_TIMEOUT",
+    "severity": "error",
+    "messageZh": "VIES 请求超时",
+    "messageEn": "VIES request timeout",
+    "actionZh": "网络或 VIES 响应慢，稍后重试或开启缓存。",
+    "actionEn": "Network or VIES response was slow; retry later or enable cache."
+  },
+  {
+    "code": "VIES_SERVER_BUSY",
+    "severity": "error",
+    "messageZh": "VIES 服务器繁忙，请稍后重试",
+    "messageEn": "VIES server busy, retry later",
+    "actionZh": "VIES 限流，降低调用频率或依赖缓存。",
+    "actionEn": "VIES is rate-limited; reduce call frequency or rely on cache."
+  },
+  {
+    "code": "VIES_INVALID_INPUT",
+    "severity": "error",
+    "messageZh": "输入参数无效",
+    "messageEn": "Invalid input parameters",
+    "actionZh": "检查 countryCode / vatNumber 是否为空或非法。",
+    "actionEn": "Check that countryCode / vatNumber are present and well-formed."
+  },
+  {
+    "code": "NETWORK_ERROR",
+    "severity": "error",
+    "messageZh": "网络错误，无法连接 VIES",
+    "messageEn": "Network error, cannot reach VIES",
+    "actionZh": "检查本地网络/防火墙是否放行对 ec.europa.eu 的 HTTPS 出站。",
+    "actionEn": "Check local network / firewall egress to ec.europa.eu over HTTPS."
+  },
+  {
+    "code": "SOAP_FAULT",
+    "severity": "error",
+    "messageZh": "VIES 返回未知 SOAP 错误",
+    "messageEn": "VIES returned an unknown SOAP fault",
+    "actionZh": "保留 faultstring 上报，稍后重试。",
+    "actionEn": "Keep the faultstring for reporting and retry later."
+  },
+  {
+    "code": "INPUT_MISSING",
+    "severity": "error",
+    "messageZh": "缺少 VAT 号或国家代码",
+    "messageEn": "Missing VAT number or country code",
+    "actionZh": "提供 vat（如 FR123456789）或同时提供 countryCode 与 vatNumber。",
+    "actionEn": "Provide vat (e.g. FR123456789) or both countryCode and vatNumber."
+  },
+  {
+    "code": "COUNTRY_UNSUPPORTED",
+    "severity": "error",
+    "messageZh": "不支持的国家代码",
+    "messageEn": "Unsupported country code",
+    "actionZh": "仅支持 EU 27 + GB + XI。",
+    "actionEn": "Only EU 27 + GB + XI are supported."
+  },
+  {
+    "code": "UNKNOWN_ERROR",
+    "severity": "error",
+    "messageZh": "未知错误",
+    "messageEn": "Unknown error",
+    "actionZh": "保留原始错误信息并上报。",
+    "actionEn": "Retain the raw error and report it."
+  }
+]</pre>
+    </details>
+  </section>
+
+  <section data-page-node-id="rMcsJM6JkZLgNTH03HOTLX" class="card">
+    <h2 data-page-node-id="wFBDLGKtrhRwbRNe0tIhON"><!--pnid:yfPCVMKhiHcOhk7gVfb47y-->8. Supported countries</h2>
+    <p data-page-node-id="aSRYSNZYRBNddfXnlELSOL" class="desc"><!--pnid:M20V1bRdvyxCnWB9HeHWB1-->VIES-supported countries: 29 (EU 27 + GB + XI).</p>
+    <details data-page-node-id="RsrqkD6sLQvQqpIi7iPyaX">
+      <summary data-page-node-id="5NygHUYOULNUY8iiQWZEZL"><!--pnid:nDhi2BwQqQTTGmWWlPoDUF-->Raw JSON（真实字节 / real payload）</summary>
+      <pre data-page-node-id="i4NcOld71Gup52kqVNZfSv" data-pnid-children="o7N0Y1Crb7l4CPB8rmwv5n">{
+  "count": 29,
+  "countries": [
+    {
+      "code": "AT",
+      "nameZh": "奥地利",
+      "nameEn": "Austria",
+      "eu": true
+    },
+    {
+      "code": "BE",
+      "nameZh": "比利时",
+      "nameEn": "Belgium",
+      "eu": true
+    },
+    {
+      "code": "BG",
+      "nameZh": "保加利亚",
+      "nameEn": "Bulgaria",
+      "eu": true
+    },
+    {
+      "code": "CY",
+      "nameZh": "塞浦路斯",
+      "nameEn": "Cyprus",
+      "eu": true
+    },
+    {
+      "code": "CZ",
+      "nameZh": "捷克",
+      "nameEn": "Czech Republic",
+      "eu": true
+    },
+    {
+      "code": "DE",
+      "nameZh": "德国",
+      "nameEn": "Germany",
+      "eu": true
+    },
+    {
+      "code": "DK",
+      "nameZh": "丹麦",
+      "nameEn": "Denmark",
+      "eu": true
+    },
+    {
+      "code": "EE",
+      "nameZh": "爱沙尼亚",
+      "nameEn": "Estonia",
+      "eu": true
+    },
+    {
+      "code": "EL",
+      "nameZh": "希腊",
+      "nameEn": "Greece",
+      "eu": true
+    },
+    {
+      "code": "ES",
+      "nameZh": "西班牙",
+      "nameEn": "Spain",
+      "eu": true
+    },
+    {
+      "code": "FI",
+      "nameZh": "芬兰",
+      "nameEn": "Finland",
+      "eu": true
+    },
+    {
+      "code": "FR",
+      "nameZh": "法国",
+      "nameEn": "France",
+      "eu": true
+    },
+    {
+      "code": "HR",
+      "nameZh": "克罗地亚",
+      "nameEn": "Croatia",
+      "eu": true
+    },
+    {
+      "code": "HU",
+      "nameZh": "匈牙利",
+      "nameEn": "Hungary",
+      "eu": true
+    },
+    {
+      "code": "IE",
+      "nameZh": "爱尔兰",
+      "nameEn": "Ireland",
+      "eu": true
+    },
+    {
+      "code": "IT",
+      "nameZh": "意大利",
+      "nameEn": "Italy",
+      "eu": true
+    },
+    {
+      "code": "LT",
+      "nameZh": "立陶宛",
+      "nameEn": "Lithuania",
+      "eu": true
+    },
+    {
+      "code": "LU",
+      "nameZh": "卢森堡",
+      "nameEn": "Luxembourg",
+      "eu": true
+    },
+    {
+      "code": "LV",
+      "nameZh": "拉脱维亚",
+      "nameEn": "Latvia",
+      "eu": true
+    },
+    {
+      "code": "MT",
+      "nameZh": "马耳他",
+      "nameEn": "Malta",
+      "eu": true
+    },
+    {
+      "code": "NL",
+      "nameZh": "荷兰",
+      "nameEn": "Netherlands",
+      "eu": true
+    },
+    {
+      "code": "PL",
+      "nameZh": "波兰",
+      "nameEn": "Poland",
+      "eu": true
+    },
+    {
+      "code": "PT",
+      "nameZh": "葡萄牙",
+      "nameEn": "Portugal",
+      "eu": true
+    },
+    {
+      "code": "RO",
+      "nameZh": "罗马尼亚",
+      "nameEn": "Romania",
+      "eu": true
+    },
+    {
+      "code": "SE",
+      "nameZh": "瑞典",
+      "nameEn": "Sweden",
+      "eu": true
+    },
+    {
+      "code": "SI",
+      "nameZh": "斯洛文尼亚",
+      "nameEn": "Slovenia",
+      "eu": true
+    },
+    {
+      "code": "SK",
+      "nameZh": "斯洛伐克",
+      "nameEn": "Slovakia",
+      "eu": true
+    },
+    {
+      "code": "GB",
+      "nameZh": "英国",
+      "nameEn": "United Kingdom",
+      "eu": false
+    },
+    {
+      "code": "XI",
+      "nameZh": "北爱尔兰",
+      "nameEn": "Northern Ireland",
+      "eu": false
+    }
+  ]
+}</pre>
+    </details>
+  </section>
+
+  <section data-page-node-id="34ZvpcxTm3BW000hNxM0rf" class="card">
+    <h2 data-page-node-id="NLhPZdSVXzuFO1kn3C5Ziw"><!--pnid:UyJ00mINXX3kSxFlCYTBD3-->9. Error lookup — VIES_MS_UNAVAILABLE</h2>
+    <p data-page-node-id="z2ccY8yJQ2tSAEQaV3TUxC" class="desc"><!--pnid:WaKW7ltrXL7NoHIzgI6QEE-->getErrorCode('VIES_MS_UNAVAILABLE') as an agent would render it.</p>
+    <details data-page-node-id="xRGXFCVDbfjxDjFfw1KxDN">
+      <summary data-page-node-id="r4unGHV1eybBJ51Woz02Io"><!--pnid:PqnTXho9TcZN3Qvhu0f0pJ-->Raw JSON（真实字节 / real payload）</summary>
+      <pre data-page-node-id="bjrPzlin2EzSQZc6AveqUF" data-pnid-children="gxfAqwj2vRch8sda01N1lK">{
+  "code": "VIES_MS_UNAVAILABLE",
+  "severity": "error",
+  "messageZh": "成员国税务系统暂不可用",
+  "messageEn": "Member State service unavailable",
+  "actionZh": "该国税务接口临时不可用，稍后重试（建议开启缓存）。",
+  "actionEn": "The member state's tax interface is temporarily down; retry later (caching recommended)."
+}</pre>
+    </details>
+  </section>
+</main>
+<footer data-page-node-id="DDi84Fk5G5bLPkiIhqKLpl"><!--pnid:kukD35XVCEthYyEdgVtCmn-->Generated by scripts/verify.ts · vies-vat-validator-mcp v1.0.0</footer>
+</body>
+</html>

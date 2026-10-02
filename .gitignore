@@ -1,0 +1,13 @@
+node_modules/
+dist/
+.apify/
+*.log
+.DS_Store
+.env
+.env.*
+*.tsbuildinfo
+coverage/
+.vscode/
+.idea/
+*.tgz
+.cache/
