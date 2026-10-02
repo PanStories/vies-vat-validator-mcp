@@ -28,12 +28,47 @@
 |---|---|---|
 | `validate_vat` | free local format check, then optional live VIES verification; structured + bilingual errors | $0.0005 / event |
 | `check_vat_format` | pure local regex format check — **no network, free** | free |
-| `list_supported_countries` | supported countries (bilingual) | free |
+| `list_supported_countries` | supported countries — native name + local VAT term + 中文/EN | free |
 | `get_error_codes` | full bilingual error-code table | free |
 | resources | `vat://error-codes` / `vat://supported-countries` / `vat://spec` | free |
 | prompts | `vat_compliance_guide` / `explain_vat_result` | free |
 
-Covers **EU 27 + GB + XI** (Northern Ireland).
+Covers **EU 27 + GB + XI** (Northern Ireland). Every country also carries its **native name** and — far more useful — the **local term for the VAT number**, which is what people actually search for:
+
+| 代码 Code | 母语名 Native | 当地 VAT 叫法 Local VAT term | 中文 | English | EU |
+|---|---|---|---|---|---|
+| AT | Österreich | UID-Nummer | 奥地利 | Austria | ✅ |
+| BE | België / Belgique | BTW-nummer / numéro de TVA | 比利时 | Belgium | ✅ |
+| BG | България | ДДС номер | 保加利亚 | Bulgaria | ✅ |
+| CY | Κύπρος / Kıbrıs | Αριθμός ΦΠΑ | 塞浦路斯 | Cyprus | ✅ |
+| CZ | Česko | DIČ | 捷克 | Czech Republic | ✅ |
+| DE | Deutschland | USt-IdNr. | 德国 | Germany | ✅ |
+| DK | Danmark | CVR-nummer | 丹麦 | Denmark | ✅ |
+| EE | Eesti | KMKR number | 爱沙尼亚 | Estonia | ✅ |
+| EL | Ελλάδα | Αριθμός ΦΠΑ | 希腊 | Greece | ✅ |
+| ES | España | NIF (IVA) | 西班牙 | Spain | ✅ |
+| FI | Suomi | ALV-numero | 芬兰 | Finland | ✅ |
+| FR | France | numéro de TVA | 法国 | France | ✅ |
+| HR | Hrvatska | PDV broj | 克罗地亚 | Croatia | ✅ |
+| HU | Magyarország | ÁFA-szám | 匈牙利 | Hungary | ✅ |
+| IE | Ireland / Éire | VAT number | 爱尔兰 | Ireland | ✅ |
+| IT | Italia | Partita IVA | 意大利 | Italy | ✅ |
+| LT | Lietuva | PVM kodas | 立陶宛 | Lithuania | ✅ |
+| LU | Lëtzebuerg / Luxembourg | numéro TVA | 卢森堡 | Luxembourg | ✅ |
+| LV | Latvija | PVN numurs | 拉脱维亚 | Latvia | ✅ |
+| MT | Malta | VAT number | 马耳他 | Malta | ✅ |
+| NL | Nederland | btw-nummer | 荷兰 | Netherlands | ✅ |
+| PL | Polska | NIP | 波兰 | Poland | ✅ |
+| PT | Portugal | NIF | 葡萄牙 | Portugal | ✅ |
+| RO | România | cod de TVA | 罗马尼亚 | Romania | ✅ |
+| SE | Sverige | momsregistreringsnummer | 瑞典 | Sweden | ✅ |
+| SI | Slovenija | ID za DDV | 斯洛文尼亚 | Slovenia | ✅ |
+| SK | Slovensko | IČ DPH | 斯洛伐克 | Slovakia | ✅ |
+| GB | United Kingdom | VAT registration number | 英国 | United Kingdom | — |
+| XI | Northern Ireland | VAT registration number (XI) | 北爱尔兰 | Northern Ireland | — |
+
+> 叫法取当地商务常用写法；部分国家有不止一种官方接受的写法，表中列最主要的那种。
+> Terms follow common local business usage — some countries accept more than one form; the main one is shown.
 
 ## Quick start (local)
 
@@ -129,12 +164,47 @@ See [SPEC.md](./SPEC.md) for the full contract.
 |---|---|---|
 | `validate_vat` | 先做免费本地格式校验，再按需调用欧盟官方 VIES 接口核验真实性；结构化 + 双语错误 | $0.0005 / 次 |
 | `check_vat_format` | 纯本地正则格式校验，**零网络、零成本** | 免费 |
-| `list_supported_countries` | 返回支持国家（中/英双语） | 免费 |
+| `list_supported_countries` | 返回支持国家（母语名 + 当地 VAT 叫法 + 中/英） | 免费 |
 | `get_error_codes` | 返回完整中英双语错误码表 | 免费 |
 | resources | `vat://error-codes` / `vat://supported-countries` / `vat://spec` | 免费 |
 | prompts | `vat_compliance_guide` / `explain_vat_result` | 免费 |
 
-覆盖 **EU 27 + GB + XI**（北爱尔兰）。
+覆盖 **EU 27 + GB + XI**（北爱尔兰）。每个国家还带**母语名**，以及更实用的**当地对 VAT 号的叫法**——这才是当地人真正会搜的词：
+
+| 代码 Code | 母语名 Native | 当地 VAT 叫法 Local VAT term | 中文 | English | EU |
+|---|---|---|---|---|---|
+| AT | Österreich | UID-Nummer | 奥地利 | Austria | ✅ |
+| BE | België / Belgique | BTW-nummer / numéro de TVA | 比利时 | Belgium | ✅ |
+| BG | България | ДДС номер | 保加利亚 | Bulgaria | ✅ |
+| CY | Κύπρος / Kıbrıs | Αριθμός ΦΠΑ | 塞浦路斯 | Cyprus | ✅ |
+| CZ | Česko | DIČ | 捷克 | Czech Republic | ✅ |
+| DE | Deutschland | USt-IdNr. | 德国 | Germany | ✅ |
+| DK | Danmark | CVR-nummer | 丹麦 | Denmark | ✅ |
+| EE | Eesti | KMKR number | 爱沙尼亚 | Estonia | ✅ |
+| EL | Ελλάδα | Αριθμός ΦΠΑ | 希腊 | Greece | ✅ |
+| ES | España | NIF (IVA) | 西班牙 | Spain | ✅ |
+| FI | Suomi | ALV-numero | 芬兰 | Finland | ✅ |
+| FR | France | numéro de TVA | 法国 | France | ✅ |
+| HR | Hrvatska | PDV broj | 克罗地亚 | Croatia | ✅ |
+| HU | Magyarország | ÁFA-szám | 匈牙利 | Hungary | ✅ |
+| IE | Ireland / Éire | VAT number | 爱尔兰 | Ireland | ✅ |
+| IT | Italia | Partita IVA | 意大利 | Italy | ✅ |
+| LT | Lietuva | PVM kodas | 立陶宛 | Lithuania | ✅ |
+| LU | Lëtzebuerg / Luxembourg | numéro TVA | 卢森堡 | Luxembourg | ✅ |
+| LV | Latvija | PVN numurs | 拉脱维亚 | Latvia | ✅ |
+| MT | Malta | VAT number | 马耳他 | Malta | ✅ |
+| NL | Nederland | btw-nummer | 荷兰 | Netherlands | ✅ |
+| PL | Polska | NIP | 波兰 | Poland | ✅ |
+| PT | Portugal | NIF | 葡萄牙 | Portugal | ✅ |
+| RO | România | cod de TVA | 罗马尼亚 | Romania | ✅ |
+| SE | Sverige | momsregistreringsnummer | 瑞典 | Sweden | ✅ |
+| SI | Slovenija | ID za DDV | 斯洛文尼亚 | Slovenia | ✅ |
+| SK | Slovensko | IČ DPH | 斯洛伐克 | Slovakia | ✅ |
+| GB | United Kingdom | VAT registration number | 英国 | United Kingdom | — |
+| XI | Northern Ireland | VAT registration number (XI) | 北爱尔兰 | Northern Ireland | — |
+
+> 叫法取当地商务常用写法；部分国家有不止一种官方接受的写法，表中列最主要的那种。
+> Terms follow common local business usage — some countries accept more than one form; the main one is shown.
 
 ## 快速开始（本地）
 
@@ -230,12 +300,47 @@ npm run apify:push       # 上架
 |---|---|---|
 | `validate_vat` | 先做免費本地格式校驗，再依需求呼叫歐盟官方 VIES 介面核驗真實性；結構化 + 雙語錯誤 | $0.0005 / 次 |
 | `check_vat_format` | 純本地正則格式校驗，**零網路、零成本** | 免費 |
-| `list_supported_countries` | 回傳支援國家（中/英雙語） | 免費 |
+| `list_supported_countries` | 回傳支援國家（母語名 + 當地 VAT 叫法 + 中/英） | 免費 |
 | `get_error_codes` | 回傳完整中英雙語錯誤碼表 | 免費 |
 | resources | `vat://error-codes` / `vat://supported-countries` / `vat://spec` | 免費 |
 | prompts | `vat_compliance_guide` / `explain_vat_result` | 免費 |
 
-涵蓋 **EU 27 + GB + XI**（北愛爾蘭）。
+涵蓋 **EU 27 + GB + XI**（北愛爾蘭）。每個國家還帶**母語名**，以及更實用的**當地對 VAT 號的叫法**——這才是當地人真正會搜的詞：
+
+| 代码 Code | 母语名 Native | 当地 VAT 叫法 Local VAT term | 中文 | English | EU |
+|---|---|---|---|---|---|
+| AT | Österreich | UID-Nummer | 奥地利 | Austria | ✅ |
+| BE | België / Belgique | BTW-nummer / numéro de TVA | 比利时 | Belgium | ✅ |
+| BG | България | ДДС номер | 保加利亚 | Bulgaria | ✅ |
+| CY | Κύπρος / Kıbrıs | Αριθμός ΦΠΑ | 塞浦路斯 | Cyprus | ✅ |
+| CZ | Česko | DIČ | 捷克 | Czech Republic | ✅ |
+| DE | Deutschland | USt-IdNr. | 德国 | Germany | ✅ |
+| DK | Danmark | CVR-nummer | 丹麦 | Denmark | ✅ |
+| EE | Eesti | KMKR number | 爱沙尼亚 | Estonia | ✅ |
+| EL | Ελλάδα | Αριθμός ΦΠΑ | 希腊 | Greece | ✅ |
+| ES | España | NIF (IVA) | 西班牙 | Spain | ✅ |
+| FI | Suomi | ALV-numero | 芬兰 | Finland | ✅ |
+| FR | France | numéro de TVA | 法国 | France | ✅ |
+| HR | Hrvatska | PDV broj | 克罗地亚 | Croatia | ✅ |
+| HU | Magyarország | ÁFA-szám | 匈牙利 | Hungary | ✅ |
+| IE | Ireland / Éire | VAT number | 爱尔兰 | Ireland | ✅ |
+| IT | Italia | Partita IVA | 意大利 | Italy | ✅ |
+| LT | Lietuva | PVM kodas | 立陶宛 | Lithuania | ✅ |
+| LU | Lëtzebuerg / Luxembourg | numéro TVA | 卢森堡 | Luxembourg | ✅ |
+| LV | Latvija | PVN numurs | 拉脱维亚 | Latvia | ✅ |
+| MT | Malta | VAT number | 马耳他 | Malta | ✅ |
+| NL | Nederland | btw-nummer | 荷兰 | Netherlands | ✅ |
+| PL | Polska | NIP | 波兰 | Poland | ✅ |
+| PT | Portugal | NIF | 葡萄牙 | Portugal | ✅ |
+| RO | România | cod de TVA | 罗马尼亚 | Romania | ✅ |
+| SE | Sverige | momsregistreringsnummer | 瑞典 | Sweden | ✅ |
+| SI | Slovenija | ID za DDV | 斯洛文尼亚 | Slovenia | ✅ |
+| SK | Slovensko | IČ DPH | 斯洛伐克 | Slovakia | ✅ |
+| GB | United Kingdom | VAT registration number | 英国 | United Kingdom | — |
+| XI | Northern Ireland | VAT registration number (XI) | 北爱尔兰 | Northern Ireland | — |
+
+> 叫法取当地商务常用写法；部分国家有不止一种官方接受的写法，表中列最主要的那种。
+> Terms follow common local business usage — some countries accept more than one form; the main one is shown.
 
 ## 快速開始（本地）
 

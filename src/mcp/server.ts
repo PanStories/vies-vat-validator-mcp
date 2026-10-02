@@ -214,7 +214,7 @@ export function createMcpServer(): McpServer {
   // ---- Tool: list_supported_countries ----
   server.tool(
     "list_supported_countries",
-    "返回支持 VAT 校验的国家列表（中/英双语）。List VIES-supported countries (bilingual).",
+    "返回支持 VAT 校验的国家列表：代码 + 母语名 + 当地 VAT 叫法（如 USt-IdNr. / Partita IVA / btw-nummer）+ 中英名。List VIES-supported countries with native name and local VAT term.",
     {},
     async () => {
       await charge("mcp-list-countries");
@@ -222,9 +222,9 @@ export function createMcpServer(): McpServer {
       const text = [
         `# 支持的国家 / Supported Countries (${COUNTRIES.length})`,
         "",
-        "| 代码 Code | 中文 | English | EU |",
-        "|----------|------|---------|-----|",
-        ...COUNTRIES.map((c) => `| ${c.code} | ${c.nameZh} | ${c.nameEn} | ${c.eu ? "✅" : "—"} |`),
+        "| 代码 Code | 母语名 Native | 当地 VAT 叫法 Local VAT term | 中文 | English | EU |",
+        "|---|---|---|---|---|---|",
+        ...COUNTRIES.map((c) => `| ${c.code} | ${c.nameNative} | ${c.vatTerm} | ${c.nameZh} | ${c.nameEn} | ${c.eu ? "✅" : "—"} |`),
       ].join("\n");
       return { content: [{ type: "text" as const, text }], structuredContent: view };
     },
