@@ -9,6 +9,7 @@
 | MCP endpoint | `https://neeenja--vies-vat-validator-mcp.apify.actor/mcp` |
 | Apify Store | https://apify.com/neeenja/vies-vat-validator-mcp |
 | Source | https://github.com/PanStories/vies-vat-validator-mcp |
+| Featured on | [Sartbot Featured](https://sartbot.com/mcp/vies-vat-validator-mcp/) |
 
 ---
 
