@@ -1,8 +1,10 @@
 # VIES VAT Validator MCP 🇪🇺
 
+[![M8ven Trust Index](https://m8ven.ai/badge/mcp/panstories/vies-vat-validator-mcp)](https://m8ven.ai/mcp/panstories/vies-vat-validator-mcp)
+
 > **VIES VAT Validator MCP** validates EU VAT numbers through the official **free** VIES SOAP API, wrapped with a **local format pre-check + free TTL cache** and **bilingual (中文 / English) error codes**. A "regulatory must-have" compliance tool for cross-border e-commerce and trade sellers.
 
-> **Current version:** 1.0.1 · **License:** MIT · **Trust:** built read-only, no secret exfiltration, self-healing bilingual errors.
+> **Current version: 1.0.1** · **License:** MIT · **Trust:** built read-only, no secret exfiltration, self-healing bilingual errors.
 
 🌐 **[English](#english)** · **[简体中文](#简体中文)** · **[繁體中文](#繁體中文)**
 
