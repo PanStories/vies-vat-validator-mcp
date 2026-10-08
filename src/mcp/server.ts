@@ -8,7 +8,7 @@ import { checkVatLive } from "../vies/client.js";
 import { charge } from "./charge.js";
 
 export const SERVER_NAME = "vies-vat-validator-mcp";
-export const SERVER_VERSION = "1.0.0";
+export const SERVER_VERSION = "1.0.1";
 
 export type ValidationSource = "format-only" | "cache" | "vies";
 
@@ -114,6 +114,12 @@ export function createMcpServer(): McpServer {
       useCache: z.boolean().default(true).describe("是否使用免费 TTL 缓存（默认 24h）/ use free TTL cache"),
       live: z.boolean().default(true).describe("是否在格式合规后调用 VIES 实查 / call live VIES after format check"),
     },
+    {
+      readOnlyHint: true,
+      destructiveHint: false,
+      idempotentHint: true,
+      openWorldHint: true,
+    },
     async (args) => {
       let cc = "";
       let num = "";
@@ -183,6 +189,12 @@ export function createMcpServer(): McpServer {
       countryCode: z.string().optional().describe("ISO 国家代码 / 2-letter country code"),
       vatNumber: z.string().optional().describe("不含前缀的税号 / VAT number without prefix"),
     },
+    {
+      readOnlyHint: true,
+      destructiveHint: false,
+      idempotentHint: true,
+      openWorldHint: false,
+    },
     async (args) => {
       await charge("mcp-check-format");
       let cc = "";
@@ -216,6 +228,12 @@ export function createMcpServer(): McpServer {
     "list_supported_countries",
     "返回支持 VAT 校验的国家列表：代码 + 母语名 + 当地 VAT 叫法（如 USt-IdNr. / Partita IVA / btw-nummer）+ 中英名。List VIES-supported countries with native name and local VAT term.",
     {},
+    {
+      readOnlyHint: true,
+      destructiveHint: false,
+      idempotentHint: true,
+      openWorldHint: false,
+    },
     async () => {
       await charge("mcp-list-countries");
       const view = { countries: COUNTRIES, count: COUNTRIES.length };
@@ -235,6 +253,12 @@ export function createMcpServer(): McpServer {
     "get_error_codes",
     "返回完整的中英双语 VAT 校验错误码表。Return the full bilingual error-code table.",
     {},
+    {
+      readOnlyHint: true,
+      destructiveHint: false,
+      idempotentHint: true,
+      openWorldHint: false,
+    },
     async () => {
       await charge("mcp-get-error-codes");
       const view = { errors: ERROR_CODES, count: ERROR_CODES.length };

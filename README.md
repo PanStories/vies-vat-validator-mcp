@@ -2,6 +2,8 @@
 
 > **VIES VAT Validator MCP** validates EU VAT numbers through the official **free** VIES SOAP API, wrapped with a **local format pre-check + free TTL cache** and **bilingual (中文 / English) error codes**. A "regulatory must-have" compliance tool for cross-border e-commerce and trade sellers.
 
+> **Current version:** 1.0.1 · **License:** MIT · **Trust:** built read-only, no secret exfiltration, self-healing bilingual errors.
+
 🌐 **[English](#english)** · **[简体中文](#简体中文)** · **[繁體中文](#繁體中文)**
 
 | It lives at | Link |

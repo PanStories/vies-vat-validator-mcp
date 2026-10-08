@@ -129,4 +129,5 @@ node dist/verify.js   # 或 npm run verify
 
 | 版本 | 日期 | 变更 | 决策人 |
 |------|------|------|--------|
+| 1.0.1 | 2026-10-09 | M8ven Trust Index 合规：补 tool annotations、SECURITY.md、工具级测试；CVE 清零（basic-ftp override） | 老板 |
 | 1.0.0 | 2026-10-02 | 初始 SPEC：MVP 锁定 VAT 校验 + 免费缓存 + 双语错误码，Apify PPE | 老板 / Wiwi |

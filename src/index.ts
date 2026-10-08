@@ -91,7 +91,7 @@ async function startHttpServer(): Promise<void> {
       }
       sendJson(res, 200, {
         name: "vies-vat-validator-mcp",
-        version: "1.0.0",
+        version: "1.0.1",
         transport: "streamable-http",
         mcpEndpoint: MCP_PATH,
         health: "/health",

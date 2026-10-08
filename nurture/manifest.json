@@ -1,0 +1,52 @@
+{
+  "slug": "vies-vat-validator-mcp",
+  "version": "1.0.1",
+  "repo_root": ".",
+  "endpoint": "https://neeenja--vies-vat-validator-mcp.apify.actor/mcp",
+  "tagline": {
+    "en": "Two-stage EU VAT validation: free offline format pre-check, then live VIES, with bilingual error codes.",
+    "zh": "两段式欧盟 VAT 校验：本地免费格式预检 + 官方 VIES 实查，中英双语错误码。",
+    "zh_hant": "兩段式歐盟 VAT 校驗：本地免費格式預檢 + 官方 VIES 實查，中英雙語錯誤碼。"
+  },
+  "tools": [
+    { "name": "validate_vat", "price": "0.0005" },
+    { "name": "check_vat_format", "price": "0" },
+    { "name": "list_supported_countries", "price": "0" },
+    { "name": "get_error_codes", "price": "0" }
+  ],
+  "surfaces": [
+    {
+      "id": "README",
+      "path": "README.md",
+      "require": [
+        "{version}",
+        "{endpoint}",
+        "{tagline.en}",
+        "{tagline.zh}",
+        "{tagline.zh_hant}",
+        "{tools.all}",
+        "{prices.all}"
+      ]
+    },
+    {
+      "id": "CHANGELOG",
+      "path": "CHANGELOG.md",
+      "require": ["{version}"]
+    },
+    {
+      "id": "package json",
+      "path": "package.json",
+      "require": ["{version}"]
+    },
+    {
+      "id": "actor json",
+      "path": ".actor/actor.json",
+      "require": ["{tools.billable}"]
+    },
+    {
+      "id": "llms txt",
+      "path": "llms.txt",
+      "require": ["{endpoint}", "{tagline.en}"]
+    }
+  ]
+}

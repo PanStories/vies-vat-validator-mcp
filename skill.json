@@ -1,6 +1,6 @@
 {
   "name": "vies-vat-validator-mcp",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "title": "VIES VAT Validator MCP",
   "type": "mcp-server",
   "summary": "Validate EU VAT numbers via the free VIES API with a free format cache and bilingual error codes. 欧盟 VIES 免费校验 VAT 税号。",
