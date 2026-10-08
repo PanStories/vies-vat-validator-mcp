@@ -104,21 +104,19 @@ export function createMcpServer(): McpServer {
   const server = new McpServer({ name: SERVER_NAME, version: SERVER_VERSION });
 
   // ---- Tool: validate_vat ----
-  server.tool(
+  server.registerTool(
     "validate_vat",
-    "校验 VAT / 税务识别号：先做免费本地格式校验，再按需调用欧盟官方 VIES 接口核验真实性。Validate a VAT number: free local format check, then optional live VIES verification.",
     {
-      vat: z.string().optional().describe("完整 VAT 号，可含国家前缀，如 FR123456789 / Full VAT incl. country prefix"),
-      countryCode: z.string().optional().describe("ISO 国家代码，如 FR / 2-letter country code"),
-      vatNumber: z.string().optional().describe("不含国家前缀的税号 / VAT number without country prefix"),
-      useCache: z.boolean().default(true).describe("是否使用免费 TTL 缓存（默认 24h）/ use free TTL cache"),
-      live: z.boolean().default(true).describe("是否在格式合规后调用 VIES 实查 / call live VIES after format check"),
-    },
-    {
-      readOnlyHint: true,
-      destructiveHint: false,
-      idempotentHint: true,
-      openWorldHint: true,
+      description:
+        "校验 VAT / 税务识别号：先做免费本地格式校验，再按需调用欧盟官方 VIES 接口核验真实性。Validate a VAT number: free local format check, then optional live VIES verification.",
+      inputSchema: {
+        vat: z.string().optional().describe("完整 VAT 号，可含国家前缀，如 FR123456789 / Full VAT incl. country prefix"),
+        countryCode: z.string().optional().describe("ISO 国家代码，如 FR / 2-letter country code"),
+        vatNumber: z.string().optional().describe("不含国家前缀的税号 / VAT number without country prefix"),
+        useCache: z.boolean().default(true).describe("是否使用免费 TTL 缓存（默认 24h）/ use free TTL cache"),
+        live: z.boolean().default(true).describe("是否在格式合规后调用 VIES 实查 / call live VIES after format check"),
+      },
+      annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: true },
     },
     async (args) => {
       let cc = "";
@@ -181,19 +179,17 @@ export function createMcpServer(): McpServer {
   );
 
   // ---- Tool: check_vat_format ----
-  server.tool(
+  server.registerTool(
     "check_vat_format",
-    "纯本地 VAT 号格式校验（零网络、零成本）：判断号码形态是否符合该国规则。Free local format-only check (no network).",
     {
-      vat: z.string().optional().describe("完整 VAT 号，可含国家前缀 / Full VAT incl. country prefix"),
-      countryCode: z.string().optional().describe("ISO 国家代码 / 2-letter country code"),
-      vatNumber: z.string().optional().describe("不含前缀的税号 / VAT number without prefix"),
-    },
-    {
-      readOnlyHint: true,
-      destructiveHint: false,
-      idempotentHint: true,
-      openWorldHint: false,
+      description:
+        "纯本地 VAT 号格式校验（零网络、零成本）：判断号码形态是否符合该国规则。Free local format-only check (no network).",
+      inputSchema: {
+        vat: z.string().optional().describe("完整 VAT 号，可含国家前缀 / Full VAT incl. country prefix"),
+        countryCode: z.string().optional().describe("ISO 国家代码 / 2-letter country code"),
+        vatNumber: z.string().optional().describe("不含前缀的税号 / VAT number without prefix"),
+      },
+      annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false },
     },
     async (args) => {
       await charge("mcp-check-format");
@@ -224,15 +220,13 @@ export function createMcpServer(): McpServer {
   );
 
   // ---- Tool: list_supported_countries ----
-  server.tool(
+  server.registerTool(
     "list_supported_countries",
-    "返回支持 VAT 校验的国家列表：代码 + 母语名 + 当地 VAT 叫法（如 USt-IdNr. / Partita IVA / btw-nummer）+ 中英名。List VIES-supported countries with native name and local VAT term.",
-    {},
     {
-      readOnlyHint: true,
-      destructiveHint: false,
-      idempotentHint: true,
-      openWorldHint: false,
+      description:
+        "返回支持 VAT 校验的国家列表：代码 + 母语名 + 当地 VAT 叫法（如 USt-IdNr. / Partita IVA / btw-nummer）+ 中英名。List VIES-supported countries with native name and local VAT term.",
+      inputSchema: {},
+      annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false },
     },
     async () => {
       await charge("mcp-list-countries");
@@ -249,15 +243,12 @@ export function createMcpServer(): McpServer {
   );
 
   // ---- Tool: get_error_codes ----
-  server.tool(
+  server.registerTool(
     "get_error_codes",
-    "返回完整的中英双语 VAT 校验错误码表。Return the full bilingual error-code table.",
-    {},
     {
-      readOnlyHint: true,
-      destructiveHint: false,
-      idempotentHint: true,
-      openWorldHint: false,
+      description: "返回完整的中英双语 VAT 校验错误码表。Return the full bilingual error-code table.",
+      inputSchema: {},
+      annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false },
     },
     async () => {
       await charge("mcp-get-error-codes");
