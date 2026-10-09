@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.0.2 — 2026-10-09
+Dev-only 依赖安全修复（不改变工具行为、输出结构与定价）。
+
+### Changed
+- **vitest CVE 清零**：devDependency `vitest` 由 `^2.0.5`(2.1.9) 升级至 `^4.1.11`(4.1.11)，
+  修复 `GHSA-5xrq-8626-4rwp`(critical, 需 ≥3.2.6) 与 `GHSA-82fw-gwwq-j7x9`(low, 需 ≥4.1.11)。
+  仅测试工具链受影响，运行时不加载 vitest，`npm audit`(含 dev) 现为 0 vulnerabilities。
+- 测试套件在 vitest 4 下全绿（5 files / 33 tests passed）。
+
 ## 1.0.1 — 2026-10-09
 M8ven Trust Index 合规修复（不改变工具行为与定价）。
 

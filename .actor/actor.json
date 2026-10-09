@@ -3,7 +3,7 @@
   "name": "vies-vat-validator-mcp",
   "title": "VIES VAT Validator MCP",
   "description": "Validate EU VAT numbers via the official free VIES SOAP API, with a free local format-precheck cache and bilingual (中/EN) error codes. Built for cross-border e-commerce and trade compliance. 用欧盟官方免费 VIES 接口校验 VAT 税号，含本地格式缓存与中英双语错误码，面向跨境电商/外贸合规。",
-  "version": "1.0",
+  "version": "1.1",
   "buildTag": "latest",
   "usesStandbyMode": true,
   "webServerMcpPath": "/mcp",
