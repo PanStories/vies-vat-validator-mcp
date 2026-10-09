@@ -1,0 +1,18 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.PanStories/vies-vat-validator-mcp",
+  "title": "VIES VAT Validator MCP",
+  "description": "Validate EU VAT numbers against the official VIES service with a local pre-check.",
+  "version": "1.0.1",
+  "websiteUrl": "https://apify.com/neeenja/vies-vat-validator-mcp",
+  "repository": {
+    "url": "https://github.com/PanStories/vies-vat-validator-mcp",
+    "source": "github"
+  },
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://neeenja--vies-vat-validator-mcp.apify.actor/mcp"
+    }
+  ]
+}
