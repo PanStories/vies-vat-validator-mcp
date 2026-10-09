@@ -159,13 +159,18 @@ apify-client → proxy-agent → pac-proxy-agent → get-uri → basic-ftp
 
 ### 遗留待办（需老板拍板，我未擅自动手）
 
-1. **`9eb704a` registerTool 迁移需要 rebase 后才能 push** ⚠️ 最高优先级
-   另一个并发进程把 4 个工具迁移到非 deprecated 的 `registerTool()`，**代码本身是好的**
-   （已验证：build 0、33 测试全过、4 个 annotations 完好）。但它建在 rebase 前的 `ea204c0` 上、
-   **缺 Glama 的 3 个 commit** → 直接 push 会**删掉 `Dockerfile.glama` + `glama.json`**。
-   修法：`git rebase --onto 02f4a86 ea204c0 main` 后再 push。
+1. ~~**`9eb704a` registerTool 迁移需要 rebase 后才能 push**~~ ✅ **已于 2026-10-09 完成**
+   另一个并发进程把 4 个工具迁移到非 deprecated 的 `registerTool()`，代码本身是好的
+   （已验证：build 0、33 测试全过、4 个 annotations 完好）。它原先建在 rebase 前的
+   `ea204c0` 上、**缺 Glama 的 3 个 commit**，直接 push 会删掉 `Dockerfile.glama` + `glama.json`。
+   **已处理**：`git rebase --onto origin/main` 后连同 M8ven badge 提交一起 push，
+   remote tree已验证 Glama 文件与 SECURITY.md / tests / report 全部齐备、**零删除**。
+   最终 chain：`02f4a86 → 2db778d(registerTool) → 378a487(badge) → 62f1419(report)`，
+   remote `main` = `62f1419`，CI run `37924446760` 7/7 绿。
 2. **Apify 是否重新部署**：功能无变化，建议不部署；若要同步 Store 描述里的版本号则需 deploy。
 3. **M8ven Verified Publisher 认领**：需 commit `.well-known/m8ven-publisher.txt`，但 token 由 M8ven 签发、
-   **须先走完 Claim（邮箱确认）** —— 这步 AI 代做不了。
-4. **README 是否挂 M8ven badge**：坑是**只能加一次、别写死文字**（文案随认领状态自动切换），
-   验证行要用 `https://m8ven.ai/badge/mcp/<owner>-<repo>-<token>?variant=verified` 的**连字符格式**、整行原样。
+   **须先走完 Claim（邮箱确认）** —— 这步 AI 代做不了。当前 badge 已挂且自动显示分数，文案会随认领状态切换。
+4. **README badge（已完成）**：`9d170a3`/`378a487` 已加 canonical badge
+   `https://m8ven.ai/badge/mcp/panstories/vies-vat-validator-mcp`（SVG，HTTP 200）。
+   实测当前评分 **C · Emerging**，覆盖 commit `02f4a86`—— M8ven 约**一天复查一次**，
+   新 commit（`62f1419`）的分数可能尚未刷新，属正常。
