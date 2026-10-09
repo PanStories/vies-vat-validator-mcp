@@ -5,6 +5,11 @@ FROM apify/actor-node:22-slim
 # The apify/actor-node base image sets NODE_ENV=production, which makes npm
 # silently skip devDependencies (where typescript lives) unless we force
 # --include=dev. Without this, `tsc` is never installed and the build fails.
+#
+# Pin npm to v11: the npm 10.x arborist `#loadPeerSet` bug breaks
+# `npm install` of vitest 4's peer deps during cloud builds (exit 1).
+# npm 11.x resolves cleanly — mirrors the local dev environment.
+RUN npm install -g npm@11 --no-audit --no-fund
 COPY package.json ./
 RUN npm install --include=dev --no-audit --no-fund
 
