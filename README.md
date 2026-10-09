@@ -429,6 +429,10 @@ npm run apify:push       # 上架
 
 MIT — see [LICENSE](./LICENSE).
 
+## Privacy
+
+Read-only and stateless — no accounts, no personal data collected. Submitted VAT numbers are forwarded to the official EU VIES service and may be held in a memory-only cache. See [`PRIVACY.md`](./PRIVACY.md).
+
 ---
 
 ## Support · 赞助 · 贊助
