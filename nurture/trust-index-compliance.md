@@ -1,8 +1,9 @@
 # VIES VAT Validator MCP — M8ven Trust Index 合规报告
 
 > 判据来源：`nurture-mcp/references/MCP-TRUST-STANDARDS.md`（M8ven Trust Index + OpenAI 上架指南 + MCP Scorecard，2026-10-08 一手抓取）
-> 体检日期：2026-10-08 · 标的：`vies-vat-validator-mcp` v1.0.0
-> 结论：**3 处必修已全部修完**（2 个 🔴 OpenAI 硬门槛 + 5 个分数项），prod CVE 清零。本地全绿，**待老板 OK 后再 push / deploy**。
+> 体检日期：2026-10-08 · 标的：`vies-vat-validator-mcp`
+> 结论：**3 处必修已全部修完**（2 个 🔴 OpenAI 硬门槛 + 5 个分数项），prod CVE 清零。
+> **✅ 已上线：commit `02f4a86` · CI run `37809467564` 全绿 · [Release v1.0.1](https://github.com/PanStories/vies-vat-validator-mcp/releases/tag/v1.0.1)**
 
 ---
 
@@ -144,14 +145,27 @@ apify-client → proxy-agent → pac-proxy-agent → get-uri → basic-ftp
 
 ---
 
-## 7. 待老板拍板（我不擅自动手）
+## 7. 上线状态（2026-10-09 已完成）
 
-以下都是**对外动作**，按 nurture 安全边界只列清单：
+| 项 | 值 |
+|---|---|
+| commit | `02f4a86` |
+| push | `94d88c7..02f4a86` |
+| CI run | `37809467564` — **7/7 步 success**（含 `npm ci` 用带 override 的锁文件、Tests、Verify showcase） |
+| Release | **[v1.0.1](https://github.com/PanStories/vies-vat-validator-mcp/releases/tag/v1.0.1)**（该仓首个 Release；tag → `02f4a86`，非 draft） |
+| Apify 端点 | 未重新部署 —— 本次改动**不改变运行时行为**（annotations 是纯元数据、CVE 修复在未使用的proxy 链），故无需 `apify push` |
 
-1. **是否 push 本次改动**？改动共 4 文件 + 2 新增（`SECURITY.md`、`tests/tools.test.ts`）。
-   push 后 CI 会用 `npm ci` 重装（锁文件已含 override）并跑 33 个测试。
-2. **是否 bump 版本到 1.0.1 并打 Release**？（配合 §3 的 CVE 修复 + §1 的合规修复，值得一个 patch 版本）
-3. **M8ven Verified Publisher 认领**：需向仓库 commit `.well-known/m8ven-publisher.txt`，
-   但 **token 由 M8ven 签发、须先走完 Claim（邮箱确认）** —— 这步 AI 不能代做，需老板点邮件。
-4. **README 是否挂 M8ven badge**？注意坑：**只能加一次、别写死文字**（文案随认领状态自动切换），
-   且验证行要用 `https://m8ven.ai/badge/mcp/<owner>-<repo>-<token>?variant=verified` 的**连字符格式**、整行原样。
+**版本号统一升1.0.1 的位置**：`package.json` / `SERVER_VERSION`(`src/mcp/server.ts`) / `src/index.ts` / `scripts/verify.ts` footer / `skill.json` / `README.md` / `nurture/manifest.json`；CHANGELOG + SPEC 各加一条。
+
+### 遗留待办（需老板拍板，我未擅自动手）
+
+1. **`9eb704a` registerTool 迁移需要 rebase 后才能 push** ⚠️ 最高优先级
+   另一个并发进程把 4 个工具迁移到非 deprecated 的 `registerTool()`，**代码本身是好的**
+   （已验证：build 0、33 测试全过、4 个 annotations 完好）。但它建在 rebase 前的 `ea204c0` 上、
+   **缺 Glama 的 3 个 commit** → 直接 push 会**删掉 `Dockerfile.glama` + `glama.json`**。
+   修法：`git rebase --onto 02f4a86 ea204c0 main` 后再 push。
+2. **Apify 是否重新部署**：功能无变化，建议不部署；若要同步 Store 描述里的版本号则需 deploy。
+3. **M8ven Verified Publisher 认领**：需 commit `.well-known/m8ven-publisher.txt`，但 token 由 M8ven 签发、
+   **须先走完 Claim（邮箱确认）** —— 这步 AI 代做不了。
+4. **README 是否挂 M8ven badge**：坑是**只能加一次、别写死文字**（文案随认领状态自动切换），
+   验证行要用 `https://m8ven.ai/badge/mcp/<owner>-<repo>-<token>?variant=verified` 的**连字符格式**、整行原样。
