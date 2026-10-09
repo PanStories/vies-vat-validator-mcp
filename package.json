@@ -2,6 +2,7 @@
   "name": "vies-vat-validator-mcp",
   "version": "1.0.1",
   "description": "MCP server for EU VIES VAT validation via the free VIES API, with local format pre-validation and a free TTL cache. Bilingual (中/EN) error codes. 欧盟 VIES 免费接口校验 VAT 税号，含本地格式缓存与中英双语错误码。",
+  "homepage": "https://github.com/PanStories/vies-vat-validator-mcp",
   "type": "module",
   "main": "dist/index.js",
   "bin": {

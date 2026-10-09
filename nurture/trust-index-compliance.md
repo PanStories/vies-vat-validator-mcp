@@ -174,3 +174,36 @@ apify-client → proxy-agent → pac-proxy-agent → get-uri → basic-ftp
    `https://m8ven.ai/badge/mcp/panstories/vies-vat-validator-mcp`（SVG，HTTP 200）。
    实测当前评分 **C · Emerging**，覆盖 commit `02f4a86`—— M8ven 约**一天复查一次**，
    新 commit（`62f1419`）的分数可能尚未刷新，属正常。
+
+---
+
+## 8. 2026-10-09 提分追加（V2：vitest CVE + homepage）
+
+> 触发：老板「do what it takes to help increasing the m8ven.ai rating」。
+> 结论：**代码侧可修项已 100% 清零**，剩余全是老板本人动作（Claim / Connect Live / 真实采纳度）。
+
+### 8.1 vitest dev CVE 修复（`7581a8f`，已 push）
+- M8ven 唯一挂着的代码 finding = **`vitest@2.1.9` 1 critical + 1 low dev-only CVE**（GHSA-5xrq-8626-4rwp / GHSA-82fw-gwwq-j7x9）。
+- 修复：`vitest ^2.1.9 → ^4.1.11`（CVE 在 3.2.5 / 4.1.0 修复）。
+- 验证：`npm audit` = **found 0 vulnerabilities**（full + `--omit=dev` 均 0）；`npm run build` tsc exit 0；`trust_audit.py --strict` FAIL 0 · WARN 1 · PASS 16（唯一 WARN = Claim 前置的 `m8ven-publisher.txt`，正常）。
+- 注：该 commit 由 `auto-nurture-light` 自动化提交并 push（工作树先脏后干净，属并发编辑常态，已确认零删除）。
+
+### 8.2 homepage 字段（`Domain consistency` info → pass）
+- `package.json` 原先**无 `homepage`** → M8ven「Domain consistency（无 homepage）」info 项。
+- 修复：加 `"homepage": "https://github.com/PanStories/vies-vat-validator-mcp"`（与 m8ven 已引用的源仓一致，保证可解析；若后续 Sartbot 上架可换 `sartbot.com/vies-vat-validator-mcp/` 做品牌一致）。
+- 此 info 项与 bountyradar 同型（其靠 `homepage→sartbot.com/bountyradar/` 清掉，约 +6~12 分）。
+
+### 8.3 当前 M8ven 状态（re-fetch 实测）
+- 页面仍读 **commit `02f4a86`（Oct 8）**，未重扫 —— 仍显示 vitest@2.1.9 1 critical。
+- 即：`7581a8f` 起的全部修复**已在源仓就位，等 M8ven 每日重扫**才会反映。
+- 页面仍 **「Claim this MCP」未验证**、**Live Monitored: not connected**。
+- README 已有两行 badge（canonical 斜杠 + tokenized `panstories-vies-vat-validator-mcp-1bk4uh`）。
+
+### 8.4 剩余提分杠杆（100% 老板本人，AI 代做不了）
+| 杠杆 | 作用 | 如何做 |
+|---|---|---|
+| **Connect Live Monitored**（最高杠杆） | `Live Monitored: not connected` → connected；**push 即秒级重扫**（不用等每日）；verification-depth 加分 | 浏览器装 GitHub App：`https://github.com/apps/m8ven-verify/installations/new?state=l%3Dpanstories-vies-vat-validator-mcp-1bk4uh`（OAuth，只读，随时可撤） |
+| **Claim → Verified Publisher** | 去「Claim this MCP」、拿 verified badge、可一键 dispute finding、启用即时重扫 | 页面点 Claim → 收验证邮件点链接 → 按 M8ven 给的 **tokenized badge 行**整行贴回 README（注意：若给的是 `?variant=verified&v=<hash>` 形式，必须替换当前 `?s=readme` 那行，否则校验器不认）；push 后 `curl raw.githubusercontent.com/.../README.md \| grep m8ven` 确认 |
+| **真实采纳度（stars / usage）** | **唯一能打破「C 封顶」的杠杆**：M8ven 明文「Grades remain capped until adoption is earned」 | 自然 stars / 真实调用；AI 不应刷星。可借 Sartbot 站内 featured + 免费目录收录扩大发现面（Claim 后才显现） |
+
+> 关键认知：代码审计全绿 + vitest 修掉后，分数在 **C 档内**会随重扫上扬（去掉 1 critical dev CVE + 清 Domain consistency info，预估 +8~15 → 82~89/100）；但要 **C → B** 必须靠 Claim（Verified）+ Connect Live + 真实采纳度。前两者是老板一次点击的「单杠杆最大提分」。
