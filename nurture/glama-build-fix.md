@@ -80,6 +80,33 @@ The build spec includes `placeholderArguments: { "APIFY_TOKEN": "apify_api_9Xk2.
 
 The failure is upstream of any code: the Docker daemon connection itself 502s. No `package.json`, lockfile, or Dockerfile change on our side can fix a 502 from Glama's proxy. The only lever is a re-sync on Glama's side (boss-gated) — and, if persistent, Glama support.
 
+---
+
+## 2026-10-13 00:42 update — error escalated to `ECONNREFUSED` (same root cause class)
+
+A second build email arrived with a **worse** infra error:
+
+```
+DockerBuildError: connect ECONNREFUSED 10.90.0.1:80
+  at TCPConnectWrap.afterConnect (node:net:2083:16)
+```
+
+- `10.90.0.1` is a **private IP inside Glama's build VPC** — i.e. the connection from Glama's build orchestrator to its own internal Docker/build daemon is being refused.
+- The build now correctly checks out `b590fce` (our latest), so the **stale-commit theory is also ruled out**.
+- This is the **same class of failure** as the 502 (Glama's build infrastructure degraded/outage), just one layer deeper. The 502 was nginx in front of the daemon; now even the daemon's internal socket is refusing.
+
+### Attempted fix (desktop control, boss-authorized)
+- Tried to drive glama.ai via `agent-browser` (Playwright) to click **Sync Server / Rebuild**.
+- Chromium was not pre-installed → installed it (`agent-browser install`, Chrome 155 to `~/.agent-browser/browsers`).
+- `agent-browser open` still **hangs (SIGTERM, no output)** — the compiled Windows binary won't launch Chromium in this sandbox (no `--no-sandbox` passthrough available; likely needs a sandboxed display/libs).
+- **Even if the browser had launched**, a re-sync would re-hit the same `ECONNREFUSED` to Glama's dead daemon → same failure. So desktop control cannot resolve this; the outage is on Glama's side.
+
+### What actually fixes it
+1. **Wait for Glama's build infra to recover** (the 502→ECONNREFUSED flip suggests an active degradation; it may self-heal). Then re-sync.
+2. **Re-sync path (boss, when Glama is back)**: glama.ai listing → **Sync Server / Rebuild** → should go green once `10.90.0.1:80` answers.
+3. **If it keeps failing after Glama should be up**: escalate to **Glama support** with the exact `ECONNREFUSED 10.90.0.1:80` / `DockerBuildError` log above — that's their daemon, only they can restart it.
+4. Optional: once recovered, a one-time re-sync clears the failed build state.
+
 ## What was already done (AI side)
 - Local full smoke test proves repo health + pnpm-spec compatibility.
 - This runbook corrected to reflect the true 502 diagnosis (old npm-arborist guess voided).
