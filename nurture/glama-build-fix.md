@@ -1,48 +1,86 @@
-# Glama Build Failure — VIES VAT Validator MCP (2026-10-10)
+# Glama Build Failure — VIES VAT Validator MCP
 
-**Trigger**: Glama Support email 2026-10-10 03:56 — "The build for VIES VAT Validator MCP has failed."
+**Trigger**: Glama Support email "The build for VIES VAT Validator MCP has failed."
+**Last updated**: 2026-10-13 (rewritten after the real build log arrived — earlier root-cause guess was WRONG).
 
-## What we verified (repo is healthy — all local, 2026-10-10)
+---
+
+## ⚠️ Correction — the earlier theory was wrong
+
+The first pass guessed "Glama auto-runs `npm install` under npm 10 → vitest-4 peer-deps arborist bug."
+**That is disproven by the actual build log.** Do NOT follow the old npm@11 reconfigure advice.
+
+### What the real build spec / log shows
+
+```json
+{
+  "baseImage": "debian:trixie-slim",
+  "buildSteps": ["pnpm install", "pnpm run build"],
+  "cmdArguments": ["mcp-proxy", "--", "pnpm", "run", "start"],
+  "nodeVersion": "24",
+  "pinnedCommit": null
+}
+```
+
+```text
+Error name: DockerBuildError
+Cause: (HTTP code 502) unexpected - <html><title>502 Bad Gateway</title>...
+        nginx/1.28.3 (Ubuntu)
+Stack: at buildDockerImage (.../docker/routines/buildDockerImage.js:243:9)
+```
+
+- The build uses **pnpm + mcp-proxy + Node 24**, NOT npm.
+- The failure is a **`502 Bad Gateway` from Glama's nginx→Docker-daemon proxy, thrown during `buildDockerImage` — before any `RUN` step (`pnpm install`) ever executes.**
+- That is a **transient infrastructure failure on Glama's side**, not a code / dependency bug in our repo.
+
+---
+
+## Repo health — verified locally (all green)
 
 | Check | Result |
 |---|---|
-| `npm ci` stage 1 (full deps, npm 10.9.7 = what node:22 ships) | ✅ 316 pkgs, exit 0 |
-| `npm ci --omit=dev` stage 2 (npm 10.9.7) | ✅ 270 pkgs, exit 0 |
+| `npm ci` stage 1 (npm 10.9.7) | ✅ 316 pkgs, exit 0 |
+| `npm ci --omit=dev` stage 2 | ✅ 270 pkgs, exit 0 |
 | `npm run build` (tsc) | ✅ exit 0 |
-| MCP stdio handshake (`initialize` → result, the "ping" Glama runs) | ✅ instant response |
+| MCP stdio handshake (`initialize` → result) | ✅ instant response |
+| `glama.json` content | ✅ only `maintainers` (MistifyTea, PanStories) — **no build steps**, so the pnpm spec is Glama-admin config, not repo-controlled |
+| Repo compatibility w/ the pnpm spec | ✅ `build` + `start` scripts exist; `pnpm install` runs fine on an npm project; tsc → `dist/`; `mcp-proxy` wraps `pnpm run start` cleanly |
 
-## Root cause (best-supported)
+The repo is healthy and **already compatible** with the exact spec Glama is using. Nothing in the repo is broken.
 
-Glama does **not** build from the repo's `Dockerfile.glama` — it generates its own image
-(debian + node, clone into `/app`) and **auto-detects build steps** (typically `npm install`).
-Under npm 10.x, `npm install` of vitest 4's peer deps hits the arborist `#loadPeerSet` bug —
-**the exact failure already proven on the Apify cloud build** and fixed there by pinning
-npm@11 in `.actor/Dockerfile` (commit `82d0c9b`, 2026-10-09: "cloud build was failing").
-The Glama-side equivalent was never applied because that setting lives in Glama's admin UI,
-not the repo. (Corroborating precedent: github.com/alexar76/aimarket-mcp `docs/GLAMA.md` —
-"Glama does not use repo Dockerfiles … Configure the Build steps field in admin — do not
-rely on auto-detected …".)
+---
+
+## Root cause (corrected)
+
+**Glama's build infrastructure returned a 502 Bad Gateway** — their internal nginx in front of the Docker build daemon was unreachable/overloaded at build time. This is:
+- Transient (intermittent Glama-side capacity/network issue), and/or
+- Possibly tied to the base-image pull / daemon socket for the `debian:trixie-slim` build.
+
+It is **not** caused by our code, vitest 4, npm, or pnpm.
+
+Note: the generated Dockerfile pinned `de384ce` (an ancestor of current `origin/main` = `b590fce`). That commit is healthy (already has the vitest-4 + homepage fixes). A re-sync will move the pin to the latest commit.
+
+---
 
 ## Fix — boss-only (needs Glama login)
 
-1. Open the **View build details** link in the Glama email → confirm the exact failing step
-   (expect an `npm install`/ERESOLVE/arborist error; if it's something else, paste it back to Wiwi).
-2. On the listing page → **Claim** ownership (`glama.json` with maintainers
-   `MistifyTea`, `PanStories` is already in the repo to trigger this).
-3. Glama Admin → Dockerfile / build page → set:
-   - **Build steps** (ordered):
-     ```json
-     ["npm install -g npm@11 --no-audit --no-fund", "npm ci --include=dev --no-audit --no-fund", "npm run build"]
-     ```
-   - **CMD arguments**: `["node", "dist/index.js"]`
-   - **Pinned commit**: `main`
-   - (Leave Glama's default image; do NOT point it at `Dockerfile.glama` — that file is
-     for local/self-host builds only.)
-4. **Sync Server** → re-run the build test. Success = listing gains the "usable" /
-   Docker green check.
+1. Open **View build details** in the Glama email → confirm the error is the **502 Bad Gateway** (matches the log above). If it's a *different* error, paste it back to Wiwi and re-diagnose.
+2. On the Glama listing page → **Sync Server / Rebuild** (or "Re-run build test"). This re-dispatches the build against a fresh daemon.
+   - A 502 is usually transient → a single re-sync typically flips it green.
+   - If it still 502s, wait a few minutes and re-sync once more before escalating.
+3. **Only if the 502 clears but a later step fails** (e.g. `pnpm run start` missing, or a real install error), then consider build-steps changes. The current pnpm spec should pass as-is.
+4. **Escalate to Glama support** with the 502 log excerpt *only if* re-syncs keep 502ing — that's their infra, not ours.
 
-## Why not repo-fixable
+### Security caveat (not the cause, just FYI)
+The build spec includes `placeholderArguments: { "APIFY_TOKEN": "apify_api_9Xk2...PqRs" }`. That token-looking string lives in **Glama's config**, not our repo, and is passed as a container env var our MCP ignores. If it's a real, still-valid Apify token, consider rotating it since it appears in a directory build config — but it did not cause the 502.
 
-The bug is in npm 10's resolver, not our code; the repo already installs cleanly from its
-lockfile via `npm ci` (both stages verified). Glama's auto-detected `npm install` path
-bypasses the lockfile's resolved peer set, so only the admin build-steps override fixes it.
+---
+
+## Why this is not repo-fixable
+
+The failure is upstream of any code: the Docker daemon connection itself 502s. No `package.json`, lockfile, or Dockerfile change on our side can fix a 502 from Glama's proxy. The only lever is a re-sync on Glama's side (boss-gated) — and, if persistent, Glama support.
+
+## What was already done (AI side)
+- Local full smoke test proves repo health + pnpm-spec compatibility.
+- This runbook corrected to reflect the true 502 diagnosis (old npm-arborist guess voided).
+- Lesson fed back into `Nurture-MCP` SKILL.md (2026-10-13).
