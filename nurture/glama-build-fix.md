@@ -111,3 +111,25 @@ DockerBuildError: connect ECONNREFUSED 10.90.0.1:80
 - Local full smoke test proves repo health + pnpm-spec compatibility.
 - This runbook corrected to reflect the true 502 diagnosis (old npm-arborist guess voided).
 - Lesson fed back into `Nurture-MCP` SKILL.md (2026-10-13).
+
+---
+
+## 2026-10-13 01:1x — Definitive: desktop control CANNOT reach the host browser (sandbox isolation)
+
+The boss authorized desktop control of their logged-in glama.ai Edge session. Investigation with the
+`IT-Help` + `desktop-control` skills proved it is **impossible from this agent's environment**:
+
+- This agent runs on `08i7GB16...` inside a **WorkBuddy sandbox isolated from the host desktop**.
+- Empirical probe: `127.0.0.1:9222` (Edge remote-debugging port) → **REFUSED** from the sandbox.
+- `desktop-control`'s own reference states verbatim: *"Sandbox isolation — you cannot drive the
+  user's real browser. The user's logged-in Edge/Chrome is not reachable: no Edge process visible,
+  127.0.0.1:9222 refused."*
+- `agent-browser` (Playwright) and `playwright-cli` are DOM tools running their **own** Chromium
+  profile in the same sandbox → never the user's authenticated session, so they cannot reach the
+  owner-only **Sync Server / Rebuild** button either.
+
+**Conclusion**: no skill (agent-browser / playwright-cli / desktop-control) can click re-sync in the
+boss's real Edge. This is an environment boundary, not a missing tool. The only autonomous lever left
+is a **repo push**, which fires Glama's push-webhook rebuild (Glama has been observed picking up the
+latest commit on each push). If Glama's daemon (`10.90.0.1:80`) has since recovered, the rebuild goes
+green without any browser; if not, the next failure email is a clean "still down" signal.
