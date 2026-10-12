@@ -133,3 +133,62 @@ boss's real Edge. This is an environment boundary, not a missing tool. The only 
 is a **repo push**, which fires Glama's push-webhook rebuild (Glama has been observed picking up the
 latest commit on each push). If Glama's daemon (`10.90.0.1:80`) has since recovered, the rebuild goes
 green without any browser; if not, the next failure email is a clean "still down" signal.
+
+---
+
+## 2026-10-13 01:31 — 3rd failure, STILL `ECONNREFUSED` → persistent outage, push lever exhausted
+
+A third build-failure email arrived (ID `01a1312b-cf74-7504-830e-af60f6f9d2bc`), same error:
+
+```
+DockerBuildError: connect ECONNREFUSED 10.90.0.1:80
+  at buildDockerImage (.../docker/routines/buildDockerImage.js:243:9)
+```
+
+**Decisive new evidence**: this email is timestamped **01:31**, ~20 min *after* my `8e81113` push (which fired Glama's push-webhook rebuild). So Glama's rebuild of our latest commit **also hit the same `ECONNREFUSED` to `10.90.0.1:80`**. This rules out "transient" — it is a **persistent Glama build-infra outage**.
+
+**Failure timeline (all Glama-side, zero repo changes needed):**
+| Date/time | Error | Note |
+|---|---|---|
+| 2026-10-10 03:56 | `502 Bad Gateway` (nginx) | first report |
+| 2026-10-13 00:42 | `ECONNREFUSED 10.90.0.1:80` | daemon socket refusing |
+| 2026-10-13 01:31 | `ECONNREFUSED 10.90.0.1:80` | post-push webhook rebuild also failed → **persistent** |
+
+**Autonomous levers are now exhausted:**
+- ✗ Repo fix — repo is healthy (`npm run build` OK, handshake OK; verified again at 01:33).
+- ✗ Desktop control — proven impossible (sandbox isolation, `9222` refused).
+- ✗ Push-to-trigger-rebuild — already done (`8e81113`); the rebuild itself failed with the same daemon error.
+
+**Only remaining path: escalate to Glama.** Their official support channel is the **Glama Discord** (stated on every server page: *"If you have feedback or need assistance with the MCP directory API, please join our Discord server"*). There is no direct support email exposed in the build email or on the listing pages.
+
+### 📋 Ready-to-send escalation (copy into Glama Discord)
+
+```
+Subject / Title: Build daemon down — VIES VAT Validator MCP (PanStories) ECONNREFUSED 10.90.0.1:80
+
+Hi Glama team — our MCP "vies-vat-validator-mcp" (PanStories org) has had its
+build fail 3× over the last ~3 days, all with the same Glama-internal error:
+
+  DockerBuildError: connect ECONNREFUSED 10.90.0.1:80
+    at buildDockerImage (.../docker/routines/buildDockerImage.js:243:9)
+    at testMcpServerBuildSpec.js:142:41
+
+Recent build IDs:
+  - 01a1223c-ba97-70fb-b97c-6c4d401fb5b6 (502 Bad Gateway, nginx)
+  - 01a130fe-7b34-7a8b-b3d8-c677d2180fde (ECONNREFUSED 10.90.0.1:80)
+  - 01a1312b-cf74-7504-830e-af60f6f9d2bc (ECONNREFUSED 10.90.0.1:80, 2026-10-13 01:31)
+
+The failure happens during buildDockerImage — before any RUN step (pnpm install
+never executes). 10.90.0.1 is a private IP inside your build VPC, so this is your
+internal build orchestrator failing to reach its own Docker/build daemon.
+
+Our repo is healthy and fully compatible with the generated spec (pnpm + node 24 +
+mcp-proxy; `npm run build` + MCP stdio handshake both pass locally). We also pushed
+a new commit to trigger a webhook rebuild — that rebuild ALSO failed with the same
+ECONNREFUSED, confirming it's not a transient blip or a stale-commit issue.
+
+Could you please check / restart the build daemon behind 10.90.0.1:80? Happy to
+provide more logs if useful. Thanks!
+```
+
+**Boss action**: join Glama Discord, post the above (or forward this section). If you'd rather I draft a different tone / shorter version, say so. No repo change is required from our side.
