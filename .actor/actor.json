@@ -7,7 +7,10 @@
   "buildTag": "latest",
   "usesStandbyMode": true,
   "webServerMcpPath": "/mcp",
-  "categories": ["DEVELOPER_TOOLS", "AI"],
+  "categories": [
+    "DEVELOPER_TOOLS",
+    "AI"
+  ],
   "pricingModel": "PAY_PER_EVENT",
   "pricingEvents": {
     "mcp-check-format": {
@@ -36,5 +39,10 @@
     "properties": {},
     "required": []
   },
-  "output": "./output_schema.json"
+  "output": "./output_schema.json",
+  "defaultRunOptions": {
+    "maxTotalChargeUsd": 0.05,
+    "timeoutSecs": 300,
+    "memoryMbytes": 512
+  }
 }
