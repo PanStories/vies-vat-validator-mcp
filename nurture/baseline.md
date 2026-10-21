@@ -93,3 +93,20 @@ curl -s -o /dev/null -w "%{http_code}\n" -X POST \
   -H "Content-Type: application/json" -H "Accept: application/json, text/event-stream" \
   -d '{"jsonrpc":"2.0","id":1,"method":"tools/list","params":{}}'
 ```
+## 2026-10-09 weekly refresh (auto-nurture)
+- Apify totalRuns: **503**（基线 100，Δ+403，几乎全为本周自检自跑 run，非有机采纳）；isPublic=true；taggedBuilds 含 latest ✅；lastRun 2026-10-09
+- 有机 tool-call ≈ 0；收入 ≈ $0
+- GitHub stars 0；issues/PR 近 7d = 0
+- M8ven: Emerging；**Claim 待老板点击**；README 斜杠 badge → tokenized 验证行已自治修复并 push (commit de384ce)
+
+
+## 2026-10-21 B4 refresh (Apify API now available)
+
+> B4 was previously blocked: APIFY_TOKEN empty in automation sandbox. The token now
+> resolves via `~/.apify/auth.json` (Apify `/users/me` → HTTP 200), so KPIs re-verified.
+
+- **Actor:** `ghDM96xaQ9kvrsii0` · **Apify totalRuns (live):** **503** (re-verified via `GET /v2/acts/ghDM96xaQ9kvrsii0`)
+- **Pricing (live pricingInfos):** PAY_PER_EVENT · mcp-validate-vat $0.0005 (EU VIES SOAP).
+- **M8ven:** README badge tokenized (panstories-vies-vat-validator-mcp-1bk4uh?variant=verified) ✅ verified.
+- GA4 / npm / mcpservers.org / Smithery remain boss-gated (B3/B5/B6) — see fix-attempt report.
+
