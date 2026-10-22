@@ -31,7 +31,7 @@
 
 | Capability | Notes | Pricing |
 |---|---|---|
-| `validate_vat` | free local format check, then optional live VIES verification; structured + bilingual errors | $0.0005 / event |
+| `validate_vat` | free local format check, then optional live VIES verification; structured + bilingual errors | $0.005 / event |
 | `check_vat_format` | pure local regex format check — **no network, free** | free |
 | `list_supported_countries` | supported countries — native name + local VAT term + 中文/EN | free |
 | `get_error_codes` | full bilingual error-code table | free |
@@ -167,7 +167,7 @@ See [SPEC.md](./SPEC.md) for the full contract.
 
 | 能力 | 说明 | 计费 |
 |---|---|---|
-| `validate_vat` | 先做免费本地格式校验，再按需调用欧盟官方 VIES 接口核验真实性；结构化 + 双语错误 | $0.0005 / 次 |
+| `validate_vat` | 先做免费本地格式校验，再按需调用欧盟官方 VIES 接口核验真实性；结构化 + 双语错误 | $0.005 / 次 |
 | `check_vat_format` | 纯本地正则格式校验，**零网络、零成本** | 免费 |
 | `list_supported_countries` | 返回支持国家（母语名 + 当地 VAT 叫法 + 中/英） | 免费 |
 | `get_error_codes` | 返回完整中英双语错误码表 | 免费 |
@@ -303,7 +303,7 @@ npm run apify:push       # 上架
 
 | 能力 | 說明 | 計費 |
 |---|---|---|
-| `validate_vat` | 先做免費本地格式校驗，再依需求呼叫歐盟官方 VIES 介面核驗真實性；結構化 + 雙語錯誤 | $0.0005 / 次 |
+| `validate_vat` | 先做免費本地格式校驗，再依需求呼叫歐盟官方 VIES 介面核驗真實性；結構化 + 雙語錯誤 | $0.005 / 次 |
 | `check_vat_format` | 純本地正則格式校驗，**零網路、零成本** | 免費 |
 | `list_supported_countries` | 回傳支援國家（母語名 + 當地 VAT 叫法 + 中/英） | 免費 |
 | `get_error_codes` | 回傳完整中英雙語錯誤碼表 | 免費 |
