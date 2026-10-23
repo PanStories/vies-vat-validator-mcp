@@ -110,3 +110,10 @@ curl -s -o /dev/null -w "%{http_code}\n" -X POST \
 - **M8ven:** README badge tokenized (panstories-vies-vat-validator-mcp-1bk4uh?variant=verified) ✅ verified.
 - GA4 / npm / mcpservers.org / Smithery remain boss-gated (B3/B5/B6) — see fix-attempt report.
 
+
+## 2026-10-23 (Fri) weekly-light refresh
+- **KPI (Apify totalRuns, live):** **503** (Δ 0 vs 2026-10-21). Flat — the combo's traffic anchor.
+- **GitHub:** 0 stars / 0 open issues / 0 open PRs (public). Flat.
+- **M8ven:** README badge tokenized (panstories-vies-vat-validator-mcp-1bk4uh?variant=verified) ✅ verified via live raw README curl.
+- **Pricing (OBSERVATION ONLY, not changed this run — Iron Law #4):** mcp-validate-vat $0.0005 → **$0.005** effective **2026-11-06** (grandfathered), boss action via git 5799056 (2026-10-22). Corrects the stale "$0.0005" note above.
+- GA4 (B5) / npm (B3) / dirs (B6) remain boss-gated. B2 (Ethics token) now RESOLVED.
