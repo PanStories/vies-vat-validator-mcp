@@ -17,7 +17,7 @@
 | 竞品差距 | 缺 `check_vat_service_status` / bulk / consultation number | 补齐楔子 | ⏸️ | Stage 2 矩阵 |
 | 发现度 | 自动收录 Glama + LobeHub；mcpservers/Smithery/PulseMCP 404；**llms.txt 缺失** | 全渠道在架 + llms.txt | ⏸️ | preflight 3/5 drift |
 | 文案一致性 | preflight **3/5 drift**（README tagline、actor.json tools:billable 文案、llms.txt 缺失） | 0 drift | 🔴 | `nurture_preflight.py` 2026-10-24 |
-| Apify 部署 | 代码已 push GitHub，**actor 未 rebuild**（本环境无 apify CLI） | latest build = 1.0.3 | ⏸️ | 见自治修复清单 |
+| Apify 部署 | GitHub 已 push；**actor source 1.2 已上传**（npx apify-cli 可用），但 **build 被账号月度用量硬上限挡住**（Monthly usage hard limit exceeded），线上 latest 仍 1.1.2（10-09 旧代码，不含 1.0.3） | latest build = 1.0.3 | 🔴 | 见自治修复清单 / 待拍板 #1 |
 
 ---
 
@@ -43,7 +43,7 @@
 | `package.json` / `nurture/manifest.json` / `README.md` | 版本 1.0.1 → **1.0.3** 同步 | ✅ |
 | `CHANGELOG.md` | 新增 1.0.3 条目 | ✅ |
 | **Git** | commit `14f7a0a` → `main`（`e089858..14f7a0a`，10 files / +87 −16） | ✅ **pushed** |
-| **Apify deploy** | `apify push` + 重设 `idleTimeoutSecs=120 / memoryMbytes=512`（SOP #24b） | ⏸️ **本环境无 apify CLI，待部署会话/老板执行** |
+| **Apify deploy** | source **1.2 已上传**（`npx apify-cli push` 成功创建 version），但 build 触发被 **Monthly usage hard limit exceeded** 挡住（2026-10-25 实测） | 🔴 **账号计费上限，待老板提额后一键重推**；standby 120/512 未被动（build 未跑） |
 
 **质量闸门**：`vitest` **36/36 passed** · `tsc` clean · `trust_audit.py` **FAIL 0 / WARN 1 / PASS 16**（WARN=生产依赖新鲜度提示，非阻断）。
 
@@ -130,7 +130,7 @@
 
 ## 八、待老板拍板清单（真金白银 / 对外发布 / 价格变动）
 
-1. **🔴 Apify 部署 1.0.3**：本环境无 `apify` CLI，请老板或在部署会话跑 `apify login && apify push`，随后**重设** `idleTimeoutSecs=120 / memoryMbytes=512`（SOP #24b，防 push 把 standby 翻回 1024/300）。
+1. **🔴 Apify 部署 1.0.3**：source 1.2 **已上传**（`npx apify-cli push`），但 build 被**账号月度用量硬上限**挡住（2026-10-25 实测 "Monthly usage hard limit exceeded"）。请老板在 Apify Console → Billing 提高/关闭 monthly usage hard limit（或等 11-01 月度重置），之后**一键重推即上线**（source 已在，重跑 `npx apify-cli push`，build 约 1-2 分钟）。push 成功后需复核 standby 仍为 120/512（SOP #24b）。
 2. **⏸️ 新增付费事件 B2（monitor-changed $0.02）**：属价格变动，按铁律 #4 须老板批；当前不执行。
 3. **⏸️ npm publish**：本机无 `NPM_TOKEN`（`npm whoami` → ENEEDAUTH），需老板提供 token 后方可发。
 4. **⏸️ 目录提交 C2**：mcpservers.org 免账号可自治尝试；PulseMCP 需 `server.json`（已有）但提交动作建议下个 light 周期跑。
@@ -142,7 +142,7 @@
 
 | # | 动作 | 命令 / 文件 | 负责人 | 自治? |
 |---|---|---|---|---|
-| 1 | 部署 1.0.3 到 Apify | `apify push` + 重设 standby（120/512） | 老板/部署会话 | 否(无CLI) |
+| 1 | 部署 1.0.3 到 Apify | 提额后 `npx apify-cli push`（source 1.2 已在）+ 复核 standby 120/512 | 老板(提额)/AI(重推) | 否(账单阻塞) |
 | 2 | C1：生成 llms.txt + 修 README tagline/actor.json tools:billable 文案 | `nurture/manifest.json` 派生；`nurture_preflight.py` 复验 | AI | ✅ |
 | 3 | A1：实现 `check_vat_service_status` | 新增 `src/vies/status.ts` + `src/mcp/server.ts` 注册 + 测试 | AI | ✅ |
 | 4 | A3：实现 `bulk_validate_vat`（≤10，复用缓存/计费） | `src/mcp/server.ts` + 测试 | AI | ✅ |

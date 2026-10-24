@@ -128,3 +128,14 @@ curl -s -o /dev/null -w "%{http_code}\n" -X POST \
 - **关键判断：** 赛道已拥挤(~15 竞品)，核心问题不是收录而是**价值主张未穿透 + 功能楔子缺失**(service-status/bulk/consultation number)。Top-4 决策：C1(llms.txt+drift, RICE 18) > A1(service-status, 9) = A3(bulk, 9) > A2(consultation, 6)。
 - preflight drift: README tagline / actor.json tools:billable 文案 / **llms.txt 缺失** → 3/5，列为下个 light 周期修复（C1）。
 
+---
+
+## 2026-10-25 (Sun) — C1 落地 + Apify push 尝试（撞账号月度用量硬上限）
+
+- **C1 完成（commit `1e59548` → main，6 files / +226 −5）**：新增 `llms.txt`（repo 根，agent-facing：endpoint + tagline.en + 工具价格表 + 链接）；README 补三语 tagline 块（EN/简/繁）+ validate_vat 价格改两段式诚实表述（$0.0005 → 2026-11-06 起 $0.005，修正 README 超前 drift）；`.actor/actor.json` inputSchema description 列出工具名（修 tools:billable drift）+ version 1.1→1.2 供 rebuild。
+- **质量闸门**：preflight **5/5 全绿**（drift 清零）；vitest **36/36**；tsc 干净；trust_audit FAIL 0 / WARN 1 / PASS 16（同上轮）。
+- **环境坑（本机长期有效）**：vitest 4.1.11 在 **Git Bash 工具的小写盘符 cwd（c:）** 下必挂 —— `TypeError: Cannot read properties of undefined (reading 'config')` 在 describe 顶层（vitest 4 Windows 已知 bug：ESM 解析路径盘符大小写不匹配）。最小探针实验证明与源码无关。**解法：本仓测试一律用 PowerShell 工具跑**（大写 `C:\` cwd 即过）。
+- **Apify push**：`npx apify-cli push`（CLI 无需预装，~/.apify/auth.json 凭据有效）成功创建 **version 1.2**（source 上传 OK），但 build 触发返回 **"Monthly usage hard limit exceeded"** —— 账号级月度计费硬上限，非代码问题。**source 已在 Apify，限额恢复后一键重推即上线。**
+- **无损确认（push 后复核）**：pricingInfos 两条均在（$0.0005 current startedAt 10-02 + $0.005 future startedAt 2026-11-06 notified 10-22）—— Iron Law #4 无恙；actorStandby idleTimeoutSecs=120 / memoryMbytes=512 **未被动**（build 未跑，无需 SOP #24b 重设）；taggedBuilds.latest 仍 **1.1.2**（10-09 旧代码，线上暂不含 1.0.3 修复）。
+- **待老板**：Apify Console → Billing 提高/关闭 monthly usage hard limit（或等 11-01 月度重置）→ 重跑 `npx apify-cli push`。
+
