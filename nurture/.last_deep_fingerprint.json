@@ -1,0 +1,13 @@
+{
+  "last_deep_date": "2026-10-24",
+  "git_commits_since_prev": 33,
+  "open_issues": 0,
+  "kpi_totalRuns": 503,
+  "kpi_totalUsers": 1,
+  "kpi_publicRuns30d": 1,
+  "m8ven_rating": 89,
+  "m8ven_grade": "B",
+  "m8ven_verified_publisher": true,
+  "m8ven_live_monitored": true,
+  "note": "First monthly-deep. 33 commits this month (code/dep/desc changed) => full Stage 0-4 run. Next run: skip-gate compares these fields; if all flat AND zero commits => NO-CHANGE short report."
+}

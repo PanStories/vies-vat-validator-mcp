@@ -1,0 +1,29 @@
+# VIES VAT Validator MCP
+
+> Two-stage EU VAT validation: free offline format pre-check, then live VIES, with bilingual error codes.
+
+Remote MCP server (Streamable HTTP) that validates EU VAT numbers against the official free VIES SOAP API. Stage 1 is a free offline format pre-check backed by a free TTL cache; stage 2 is an optional live VIES query. Results are structured and bilingual (中文/EN) with explainable error codes — an outage is never reported as "invalid".
+
+Built for cross-border e-commerce, trade finance and KYB/compliance workflows. Covers EU 27 + GB + XI. GB and XI are honestly reported as outside VIES scope post-Brexit (pointing to HMRC / the XI portal) instead of a false "invalid".
+
+## Endpoint
+
+- MCP (Streamable HTTP): https://neeenja--vies-vat-validator-mcp.apify.actor/mcp
+- Auth: `Authorization: Bearer <APIFY_TOKEN>`
+
+## Tools
+
+| Tool | Price | What it does |
+|---|---|---|
+| `validate_vat` | $0.0005 / event (rising to $0.005 from 2026-11-06) | Live VIES check, free local format pre-check first |
+| `check_vat_format` | free | Pure local regex format check, no network |
+| `list_supported_countries` | free | Supported countries with native names + local VAT terms |
+| `get_error_codes` | free | Full bilingual error-code table |
+
+## Links
+
+- README (EN / 简体中文 / 繁體中文): https://github.com/PanStories/vies-vat-validator-mcp
+- Full contract (SPEC.md): https://github.com/PanStories/vies-vat-validator-mcp/blob/main/SPEC.md
+- Apify Store listing: https://apify.com/neeenja/vies-vat-validator-mcp
+- Sartbot listing: https://sartbot.com/mcp/vies-vat-validator-mcp/
+- License: MIT · Privacy: read-only and stateless, see PRIVACY.md

@@ -117,3 +117,14 @@ curl -s -o /dev/null -w "%{http_code}\n" -X POST \
 - **M8ven:** README badge tokenized (panstories-vies-vat-validator-mcp-1bk4uh?variant=verified) ✅ verified via live raw README curl.
 - **Pricing (OBSERVATION ONLY, not changed this run — Iron Law #4):** mcp-validate-vat $0.0005 → **$0.005** effective **2026-11-06** (grandfathered), boss action via git 5799056 (2026-10-22). Corrects the stale "$0.0005" note above.
 - GA4 (B5) / npm (B3) / dirs (B6) remain boss-gated. B2 (Ethics token) now RESOLVED.
+
+## 2026-10-24 (Sat) monthly-deep Stage 0–4 refresh
+- **Apify KPI (live GET):** totalRuns **503**, totalUsers **1**, totalUsers30Days **1**, publicActorRunStats30Days `TOTAL:1 / SUCCEEDED:1 / FAILED:0`. **lastRunStartedAt 2026-10-09T14:33:54Z** (15d stale). reviews 0/0.
+- **pricingInfos:** 当前 `$0.0005` (started 2026-10-02) + 未来 `$0.005` (started 2026-11-06, notified 2026-10-22). minimalMaxTotalChargeUsd 0.05.
+- **standby:** enabled, idleTimeoutSecs 120, memoryMbytes 512, maxTotalChargeUsd 0.05, timeoutSecs 300. taggedBuilds.latest = **1.1.2** (buildId jErq4Dia9PPVteSDe, 2026-10-09).
+- **M8ven:** **B 89/100**, **Verified Publisher**, **Live Monitored** (Claim done). README badge tokenized ✅ (no fix needed).
+- **trust_audit.py:** FAIL 0 / WARN 1 / PASS 16.
+- **自治修复 (1.0.3, commit 14f7a0a → main):** 修 GR→EL 别名 + GB 诚实出域(VAT_NOT_IN_VIES)；36/36 测试绿、tsc 干净。**Apify 部署待 `apify push`（本环境无 CLI）**。
+- **关键判断：** 赛道已拥挤(~15 竞品)，核心问题不是收录而是**价值主张未穿透 + 功能楔子缺失**(service-status/bulk/consultation number)。Top-4 决策：C1(llms.txt+drift, RICE 18) > A1(service-status, 9) = A3(bulk, 9) > A2(consultation, 6)。
+- preflight drift: README tagline / actor.json tools:billable 文案 / **llms.txt 缺失** → 3/5，列为下个 light 周期修复（C1）。
+
