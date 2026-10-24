@@ -130,7 +130,7 @@
 
 ## 八、待老板拍板清单（真金白银 / 对外发布 / 价格变动）
 
-1. **🔴 Apify 部署 1.0.3**：source 1.2 **已上传**（`npx apify-cli push`），但 build 被**账号月度用量硬上限**挡住（2026-10-25 实测 "Monthly usage hard limit exceeded"）。请老板在 Apify Console → Billing 提高/关闭 monthly usage hard limit（或等 11-01 月度重置），之后**一键重推即上线**（source 已在，重跑 `npx apify-cli push`，build 约 1-2 分钟）。push 成功后需复核 standby 仍为 120/512（SOP #24b）。
+1. **🔴 Apify 部署 1.0.3**：source 1.2 **已上传**（`npx apify-cli push`），但 build 被**账号月度用量硬上限**挡住（2026-10-25 实测 "Monthly usage hard limit exceeded"）。本账号为 **FREE plan**（$5/月，本周期 $5.0557/$5.00），周期 2026-09-25 → 10-24 23:59 UTC，**2026-10-25 08:00 GMT+8 自动重置** —— 已设 one-time automation 08:05 自动重推（**大概率零人工上线**）。仅当重置后仍失败，才需老板 Console → Billing 提额。push 成功后需复核 standby 仍为 120/512（SOP #24b）。
 2. **⏸️ 新增付费事件 B2（monitor-changed $0.02）**：属价格变动，按铁律 #4 须老板批；当前不执行。
 3. **⏸️ npm publish**：本机无 `NPM_TOKEN`（`npm whoami` → ENEEDAUTH），需老板提供 token 后方可发。
 4. **⏸️ 目录提交 C2**：mcpservers.org 免账号可自治尝试；PulseMCP 需 `server.json`（已有）但提交动作建议下个 light 周期跑。

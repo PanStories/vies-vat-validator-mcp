@@ -137,5 +137,5 @@ curl -s -o /dev/null -w "%{http_code}\n" -X POST \
 - **环境坑（本机长期有效）**：vitest 4.1.11 在 **Git Bash 工具的小写盘符 cwd（c:）** 下必挂 —— `TypeError: Cannot read properties of undefined (reading 'config')` 在 describe 顶层（vitest 4 Windows 已知 bug：ESM 解析路径盘符大小写不匹配）。最小探针实验证明与源码无关。**解法：本仓测试一律用 PowerShell 工具跑**（大写 `C:\` cwd 即过）。
 - **Apify push**：`npx apify-cli push`（CLI 无需预装，~/.apify/auth.json 凭据有效）成功创建 **version 1.2**（source 上传 OK），但 build 触发返回 **"Monthly usage hard limit exceeded"** —— 账号级月度计费硬上限，非代码问题。**source 已在 Apify，限额恢复后一键重推即上线。**
 - **无损确认（push 后复核）**：pricingInfos 两条均在（$0.0005 current startedAt 10-02 + $0.005 future startedAt 2026-11-06 notified 10-22）—— Iron Law #4 无恙；actorStandby idleTimeoutSecs=120 / memoryMbytes=512 **未被动**（build 未跑，无需 SOP #24b 重设）；taggedBuilds.latest 仍 **1.1.2**（10-09 旧代码，线上暂不含 1.0.3 修复）。
-- **待老板**：Apify Console → Billing 提高/关闭 monthly usage hard limit（或等 11-01 月度重置）→ 重跑 `npx apify-cli push`。
+- **待老板（已优化，大概率零人工）**：本账号是 **FREE plan**（月限额 $5.00），本周期用量 $5.0557/$5.00（仅超 $0.0557），周期 2026-09-25 → 10-24 23:59 UTC，**2026-10-25 08:00 GMT+8 自动重置**。已设 **one-time automation 08:05 自动重推**（reset 后跑 `npx apify-cli push` + 验证）。若届时仍失败再考虑 Console → Billing 操作。
 
