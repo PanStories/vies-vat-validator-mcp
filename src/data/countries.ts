@@ -61,11 +61,27 @@ export const COUNTRIES: CountryInfo[] = [
 
 const CODE_SET = new Set(COUNTRIES.map((c) => c.code));
 
+// Common ISO/VIES alias mapping. Greece is "EL" in VIES, but users and LLMs
+// almost always type "GR". Map the alias to the canonical VIES code so a GR
+// number validates instead of being rejected as unsupported.
+export const COUNTRY_ALIASES: Record<string, string> = { GR: "EL" };
+
+/**
+ * Resolve a user-supplied country code to its canonical VIES code.
+ * Returns "" when the code (or its alias) is not a supported VIES country.
+ */
+export function resolveCountry(code: string): string {
+  const up = (code ?? "").trim().toUpperCase();
+  if (CODE_SET.has(up)) return up;
+  const aliased = COUNTRY_ALIASES[up];
+  return aliased && CODE_SET.has(aliased) ? aliased : "";
+}
+
 export function isSupportedCountry(code: string): boolean {
-  return CODE_SET.has(code.toUpperCase());
+  return resolveCountry(code) !== "";
 }
 
 export function getCountry(code: string): CountryInfo | undefined {
-  const up = code.toUpperCase();
-  return COUNTRIES.find((c) => c.code === up);
+  const r = resolveCountry(code);
+  return r ? COUNTRIES.find((c) => c.code === r) : undefined;
 }

@@ -49,6 +49,14 @@ describe("validate_vat (live:false -> format-only, no network)", () => {
     expect(r.formatValid).toBe(false);
     expect(r.error?.code).toBe("VAT_FORMAT_INVALID");
   });
+
+  it("GB is honestly reported as out-of-VIES, NOT a false invalid", async () => {
+    const r = await callTool("validate_vat", { vat: "GB123456789", live: false });
+    expect(r.countryCode).toBe("GB");
+    expect(r.viesValid).toBeNull();
+    expect(r.valid).toBeNull();
+    expect(r.error?.code).toBe("VAT_NOT_IN_VIES");
+  });
 });
 
 describe("check_vat_format (pure local)", () => {

@@ -2,7 +2,7 @@
 // This is the "free cache" first layer: it never hits the network and lets
 // callers reject obviously malformed numbers before paying for a VIES call.
 
-import { isSupportedCountry } from "../data/countries.js";
+import { isSupportedCountry, resolveCountry } from "../data/countries.js";
 
 /**
  * Per-country VAT format regexes (after stripping spaces and the leading
@@ -65,8 +65,9 @@ export function parseVat(input: string): ParsedVat {
   const raw = normalize(input);
   // Leading 2-letter country code, only if it looks like a known pattern start.
   const m = raw.match(/^([A-Z]{2})(.*)$/);
-  if (m && isSupportedCountry(m[1])) {
-    return { countryCode: m[1], vatNumber: m[2] };
+  if (m) {
+    const cc = resolveCountry(m[1]);
+    if (cc) return { countryCode: cc, vatNumber: m[2] };
   }
   return { countryCode: "", vatNumber: raw };
 }
@@ -84,24 +85,25 @@ export interface FormatResult {
  * Validate the *format* of a VAT number for a given country. Pure / free.
  */
 export function validateFormat(countryCode: string, vatNumber: string): FormatResult {
-  const cc = (countryCode ?? "").trim().toUpperCase();
+  const rawCc = (countryCode ?? "").trim();
+  const cc = resolveCountry(rawCc);
   const num = normalize(vatNumber ?? "");
   const normalized = cc ? `${cc}${num}` : num;
 
-  if (!cc) {
+  if (!rawCc) {
     return {
       formatValid: false,
-      countryCode: cc,
+      countryCode: "",
       vatNumber: num,
       normalized,
       pattern: null,
       errorCode: "INPUT_MISSING",
     };
   }
-  if (!isSupportedCountry(cc)) {
+  if (!cc) {
     return {
       formatValid: false,
-      countryCode: cc,
+      countryCode: rawCc,
       vatNumber: num,
       normalized,
       pattern: null,

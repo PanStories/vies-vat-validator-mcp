@@ -1,6 +1,6 @@
 {
   "slug": "vies-vat-validator-mcp",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "repo_root": ".",
   "endpoint": "https://neeenja--vies-vat-validator-mcp.apify.actor/mcp",
   "tagline": {

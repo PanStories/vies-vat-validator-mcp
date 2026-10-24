@@ -1,5 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { parseVat, validateFormat, normalize } from "../src/vat/format.js";
+import { resolveCountry } from "../src/data/countries.js";
 
 describe("normalize", () => {
   it("uppercases and strips spaces", () => {
@@ -16,6 +17,17 @@ describe("parseVat", () => {
   });
   it("returns empty country when no known prefix", () => {
     expect(parseVat("123456789")).toEqual({ countryCode: "", vatNumber: "123456789" });
+  });
+});
+
+describe("resolveCountry / GR alias", () => {
+  it("maps GR to canonical EL", () => {
+    expect(resolveCountry("GR")).toBe("EL");
+    expect(parseVat("GR123456789")).toEqual({ countryCode: "EL", vatNumber: "123456789" });
+    expect(validateFormat("GR", "123456789").formatValid).toBe(true);
+  });
+  it("returns empty string for unsupported code", () => {
+    expect(resolveCountry("XX")).toBe("");
   });
 });
 

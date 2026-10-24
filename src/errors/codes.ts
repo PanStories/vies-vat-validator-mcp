@@ -112,8 +112,16 @@ export const ERROR_CODES: ErrorCode[] = [
     severity: "error",
     messageZh: "不支持的国家代码",
     messageEn: "Unsupported country code",
-    actionZh: "仅支持 EU 27 + GB + XI。",
-    actionEn: "Only EU 27 + GB + XI are supported.",
+    actionZh: "仅支持 EU 27 + GB + XI（希腊请直接用 EL 或 GR 均接受）。",
+    actionEn: "Only EU 27 + GB + XI are supported (Greece accepted as EL or GR).",
+  },
+  {
+    code: "VAT_NOT_IN_VIES",
+    severity: "info",
+    messageZh: "该国家/地区不在 VIES 范围内",
+    messageEn: "This country is outside VIES scope",
+    actionZh: "英国(GB)自脱欧后已脱离 VIES，请改用 HMRC 核验；北爱尔兰使用 XI 前缀。",
+    actionEn: "The UK (GB) left VIES after Brexit — validate via HMRC. Northern Ireland uses the XI prefix.",
   },
   {
     code: "UNKNOWN_ERROR",

@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.0.3 — 2026-10-24
+Correctness fixes for country-code handling (no pricing / tool-surface change).
+
+### Fixed
+- **GR→EL 别名**：希腊在 VIES 中为 `EL`，但用户与 LLM 常输入 `GR`。现自动将 `GR` 解析为 `EL`，不再误报 `COUNTRY_UNSUPPORTED` / `INPUT_MISSING`（兼容 `GR123456789` 直接输入）。
+- **GB 诚实出域**：英国(GB)脱欧后已脱离 VIES，旧逻辑会把有效 GB 税号误判为「无效」。现对 GB 直接返回「不在 VIES 范围内（请用 HMRC）」的诚实状态（`VAT_NOT_IN_VIES`），不再报假 invalid。
+- 新增错误码 `VAT_NOT_IN_VIES`（severity: info）与对应中英处理建议。
+- 新增回归测试：GR 别名解析、GB 出域诚实状态（测试总计 36 passed）。
+
 ## 1.0.2 — 2026-10-09
 Dev-only 依赖安全修复（不改变工具行为、输出结构与定价）。
 

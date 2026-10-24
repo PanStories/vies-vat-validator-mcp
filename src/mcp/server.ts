@@ -139,6 +139,22 @@ export function createMcpServer(): McpServer {
         return toolResult(payload({ formatValid: false, countryCode: cc, vatNumber: num, error: errView(fmt.errorCode ?? "VAT_FORMAT_INVALID"), source: "format-only" }));
       }
 
+      // GB is not covered by VIES (Brexit): never call VIES, never report a
+      // false "invalid". Surface an honest out-of-scope status instead.
+      if (cc === "GB") {
+        const ec = fmt.formatValid ? "VAT_NOT_IN_VIES" : "VAT_FORMAT_INVALID";
+        return toolResult(payload({
+          formatValid: fmt.formatValid,
+          viesValid: null,
+          valid: null,
+          countryCode: "GB",
+          vatNumber: num,
+          error: errView(ec),
+          source: "format-only",
+          note: "GB is outside VIES (Brexit). Use HMRC for UK VAT; Northern Ireland uses XI.",
+        }));
+      }
+
       if (!args.live) {
         return toolResult(payload({ formatValid: true, valid: null, countryCode: cc, vatNumber: num, source: "format-only", note: "未发起 VIES 实查 / live check skipped" }));
       }
