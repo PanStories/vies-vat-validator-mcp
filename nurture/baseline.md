@@ -139,3 +139,11 @@ curl -s -o /dev/null -w "%{http_code}\n" -X POST \
 - **无损确认（push 后复核）**：pricingInfos 两条均在（$0.0005 current startedAt 10-02 + $0.005 future startedAt 2026-11-06 notified 10-22）—— Iron Law #4 无恙；actorStandby idleTimeoutSecs=120 / memoryMbytes=512 **未被动**（build 未跑，无需 SOP #24b 重设）；taggedBuilds.latest 仍 **1.1.2**（10-09 旧代码，线上暂不含 1.0.3 修复）。
 - **待老板（已优化，大概率零人工）**：本账号是 **FREE plan**（月限额 $5.00），本周期用量 $5.0557/$5.00（仅超 $0.0557），周期 2026-09-25 → 10-24 23:59 UTC，**2026-10-25 08:00 GMT+8 自动重置**。已设 **one-time automation 08:05 自动重推**（reset 后跑 `npx apify-cli push` + 验证）。若届时仍失败再考虑 Console → Billing 操作。
 
+
+## 2026-10-30 (Fri) weekly-light refresh
+- **KPI (Apify totalRuns, live):** **503** (Δ 0 vs 2026-10-23). Flat — traffic anchor.
+- **GitHub:** 0 stars / 0 open issues / 0 open PRs (public). Flat.
+- **M8ven:** B 89/100 · Verified Publisher; README badge tokenized (panstories-vies-vat-validator-mcp-1bk4uh?variant=verified) ✅ verified via live m8ven.ai curl.
+- **Pricing:** mcp-validate-vat **$0.005** (eff 2026-11-06, boss action 10-21) — no change this run. Iron Law #4 honored.
+- Git this week: VAT fix 1.0.3 (GR->EL alias + honest GB out-of-VIES), C1 llms.txt + pricing prose, Apify push-blocked notes.
+- Blockers: B5 awaiting boss GA4 SA drop; B6 CONFIRMED-LIVE 10-25.
