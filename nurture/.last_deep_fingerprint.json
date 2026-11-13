@@ -1,13 +1,13 @@
 {
-  "last_deep_date": "2026-10-24",
-  "git_commits_since_prev": 33,
+  "last_deep_date": "2026-11-13",
+  "git_commits_since_prev": 7,
   "open_issues": 0,
-  "kpi_totalRuns": 503,
+  "kpi_totalRuns": 505,
   "kpi_totalUsers": 1,
   "kpi_publicRuns30d": 1,
   "m8ven_rating": 89,
   "m8ven_grade": "B",
   "m8ven_verified_publisher": true,
   "m8ven_live_monitored": true,
-  "note": "First monthly-deep. 33 commits this month (code/dep/desc changed) => full Stage 0-4 run. Next run: skip-gate compares these fields; if all flat AND zero commits => NO-CHANGE short report."
+  "note": "2026-11-13 monthly-deep: 1.0.3 finally live (build 1.2.3), zod CVE fixed (4.6.7), official MCP Registry published (io.github.PanStories/vies-vat-validator-mcp v1.0.3), $0.005 live since 11-06 and synced across actor.json/manifest/root-info. Organic traffic still zero (505 runs, +2 all my verification calls). Top-4: A1 service-status(9) > A3 bulk(9) > A2 consultation-number(6) = C3 Chinese content(6). Prior deep was 2026-10-24 (rating 89 then too)."
 }

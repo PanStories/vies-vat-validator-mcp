@@ -147,3 +147,36 @@ curl -s -o /dev/null -w "%{http_code}\n" -X POST \
 - **Pricing:** mcp-validate-vat **$0.005** (eff 2026-11-06, boss action 10-21) — no change this run. Iron Law #4 honored.
 - Git this week: VAT fix 1.0.3 (GR->EL alias + honest GB out-of-VIES), C1 llms.txt + pricing prose, Apify push-blocked notes.
 - Blockers: B5 awaiting boss GA4 SA drop; B6 CONFIRMED-LIVE 10-25.
+
+---
+
+## 2026-11-13 (Fri) monthly-deep Stage 0–4 + 部署收官（19 天零调用后的完整一轮）
+
+**背景**：10-25 排的 Apify 重推 automation（`f500e7ea`）被 PAUSED（从未执行）→ 1.0.3 代码滞留 Apify source 19 天未上线。本轮全部收尾。
+
+### 部署收官（全部线上实测）
+- **build 1.2.1 → 1.2.2 → 1.2.3 三连**（commit `df8a76d`/`0f547e5`/`bcf3895`，期间远端有对方 10-30 weekly-light `e70b23c`，全部 rebase + 零删除校验后推）：
+  1. `df8a76d` dockerfile 路径修（新版 apify-cli 要求相对 .actor/；npx 拉 latest 与上轮缓存版本行为不同）
+  2. `0f547e5` serverInfo 版本 1.0.1→1.0.3（src 两处硬编码）+ root info JSON 价格 $0.0005→$0.005
+  3. `bcf3895` **zod 3.25.76→4.6.7**（M8ven 1-high CVE 根因；用量极简，tsc+36/36 零痛迁移）+ server.json version 1.0.1→1.0.3
+- **价格三处同步防回退**（`b49b118`）：actor.json pricingEvents 0.0005→0.005、manifest price→0.005 —— 防 push 把 11-06 已生效的 $0.005 打回旧价（Iron Law #4）。复核 pricingInfos 双记录无损。
+- **线上验收（零成本）**：initialize serverInfo=**1.0.3** ✅；tools/list 四 hint 齐全 ✅；GB live=false → `VAT_NOT_IN_VIES` 诚实出域 ✅；GR → normalized `EL123456789` ✅。standby 120/512 全程无恙。
+- **官方 MCP Registry 发布成功**（C4）：`mcp-publisher login github --token`（GCM PAT，org namespace 授权直接成功）+ publish → **`io.github.PanStories/vies-vat-validator-mcp` v1.0.3 在列**（registry API 实测）。家族 8 个 MCP 中 7 个已在列，Vies 补齐最后一角 → PulseMCP/Smithery/GitHub registry 聚合器将自动拉取。
+- 清理：删除过时 PAUSED automation `f500e7ea`。
+
+### KPI 与市场
+- **Apify stats**：totalRuns **505**（19 天 +2 全是我的验证调用）、totalUsers **1**、lastRun 10-09、reviews 0/0 —— **有机增长仍为零，价值主张穿透问题未解**。
+- **M8ven**：Grade B · Verified Publisher · Live Monitored；Tool annotations **pass**；findings 仅剩 zod 1-high（已修，待 ~daily 重扫）。
+- **竞品情报（2026-11）**：vies-smoother（circuit-breaker+100 free）、vatnode（consultation number 全站核心+national fallback）、lwsdjfls/gp005/fabriken2026（Apify 三强：bulk+三态+consultation+monitor）。价格带 $0.002–$0.01，我们 $0.005 居中。**VIES `/check-status` 端点现成**（A1 可行性确认）。DE VIES uptime 40-60%（每夜 21:40-01:00 UTC 下线）是 service-status 工具的需求铁证。
+- **新渠道认知**：官方 MCP Registry 是生态新枢纽（一次发布全聚合拉取）；mcpservers.org 已 LIVE（10-25）；listed_on_claude/openai=null 是下一个发现 frontier。
+- 信任闸门：preflight 5/5、vitest 36/36、tsc clean、trust_audit FAIL 0/WARN 1（m8ven-publisher.txt，Claimed 态已过，不阻）。
+
+### 决策（RICE）
+Top-4：**A1 service-status (9) > A3 bulk (9) > A2 consultation number (6) = C3 中文内容 (6)**。B1 monitor-changed $0.02 待老板批（铁律 #4）。
+
+### 环境坑新增（本机长期有效）
+1. **新版 apify-cli 把 `~/.apify/auth.json` 迁移到 v2 结构**（profiles+activeProfile，token 移入 Windows 凭据管理器 `LegacyGeneric:target=<userId>.com.apify.cli.token`）→ 旧 curl 脚本读 `auth.json.token` 得空串 401。**解法：`npx apify-cli auth token` 官方命令取 token**。
+2. dockerfile 字段新版 CLI 要求相对 `.actor/` 根（`Dockerfile` 而非 `.actor/Dockerfile`）。
+3. python urllib 外连被沙盒 SIGTERM（偶发）→ 大数据拉取用 curl+node 管道。
+4. node fetch 解析不了 `neeenja--...apify.actor` 双横线域名（Failed to parse URL）→ MCP 握手用 curl。
+5. 共享仓并发依旧：commit 前 `git pull --rebase` + 零删除校验已成标准动作（本轮吃到一次远端领先）。
