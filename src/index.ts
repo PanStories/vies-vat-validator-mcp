@@ -91,7 +91,7 @@ async function startHttpServer(): Promise<void> {
       }
       sendJson(res, 200, {
         name: "vies-vat-validator-mcp",
-        version: "1.0.1",
+        version: "1.0.3",
         transport: "streamable-http",
         mcpEndpoint: MCP_PATH,
         health: "/health",
@@ -101,7 +101,7 @@ async function startHttpServer(): Promise<void> {
           "list_supported_countries",
           "get_error_codes",
         ],
-        pricing: { "validate_vat (live VIES)": "$0.0005", others: "free" },
+        pricing: { "validate_vat (live VIES)": "$0.005", others: "free" },
       });
       return;
     }

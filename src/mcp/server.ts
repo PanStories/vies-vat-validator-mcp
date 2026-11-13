@@ -8,7 +8,7 @@ import { checkVatLive } from "../vies/client.js";
 import { charge } from "./charge.js";
 
 export const SERVER_NAME = "vies-vat-validator-mcp";
-export const SERVER_VERSION = "1.0.1";
+export const SERVER_VERSION = "1.0.3";
 
 export type ValidationSource = "format-only" | "cache" | "vies";
 
