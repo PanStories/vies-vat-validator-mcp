@@ -30,7 +30,7 @@
       "eventPriceUsd": 0.005
     }
   },
-  "dockerfile": ".actor/Dockerfile",
+  "dockerfile": "Dockerfile",
   "inputSchema": {
     "title": "VIES VAT Validator MCP",
     "description": "This Actor is a remote MCP server. Connect an MCP client to the standby /mcp endpoint and call its tools: validate_vat (live VIES check, billed per event), check_vat_format (free offline pre-check), list_supported_countries (free), get_error_codes (free). No manual input is required.",
