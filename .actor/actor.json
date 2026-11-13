@@ -27,7 +27,7 @@
     },
     "mcp-validate-vat": {
       "eventTitle": "Live VIES VAT validation",
-      "eventPriceUsd": 0.0005
+      "eventPriceUsd": 0.005
     }
   },
   "dockerfile": ".actor/Dockerfile",
